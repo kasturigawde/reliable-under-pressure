@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reliable Under Pressure · SupeRR Selector dashboard</title>
+<meta name="description" content="Pressure ratings and data exploration for the SupeRR Selector Season 2 Round 1 challenge: the ten most reliable T20 batters and bowlers under pressure.">
+<!-- Standalone runtime for the dashboard (dash.*): loads dashboard.html and its data, then draws it. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+  :root {
+    --color-fg: #1F2430; --color-fg-muted: #5E6573; --color-bg: #FFFFFF; --color-panel: #FFFFFF;
+    --color-border-line: #E4E6EC; --color-ok: #1F8A4C; --color-warn: #B7791F; --color-bad: #C53030;
+    --font-anthropic-sans: system-ui, -apple-system, "Segoe UI", sans-serif; --font-anthropic-serif: Georgia, "Times New Roman", serif;
+    --cds-font-size-caption: 12px; --cds-font-size-body: 14px; --cds-font-size-heading: 16px; --cds-font-size-title: 24px;
+    --cds-font-weight-medium: 600; --cds-gap-xs: 4px; --cds-gap-sm: 8px; --cds-gap-md: 12px; --cds-gap-lg: 20px; --cds-gap-xl: 32px;
+    --cds-pad-lg: 18px; --cds-radius: 10px; --cds-chart-grid: #EEF0F4; --cds-chart-axis: #C9CDD6; --cds-chart-reference: #8A92A3;
+    --cds-chart-muted: #C9CDD6; --cds-text-secondary: #5E6573; --cds-surface-popover: #FFFFFF; --cds-border: #E4E6EC;
+    --cds-shadow-popover: 0 6px 24px rgba(10, 28, 63, .14); --cds-dur-slow: 300ms; --cds-ease-out: ease-out;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --color-fg: #ECEDEF; --color-fg-muted: #A4A9B4; --color-bg: #17181B; --color-panel: #1F2125; --color-border-line: #2E3138;
+    --cds-chart-grid: #2A2D33; --cds-chart-axis: #474B55; --cds-text-secondary: #A4A9B4; --cds-surface-popover: #26282D; --cds-border: #3A3D45;
+  } }
+  :root[data-theme="dark"] {
+    --color-fg: #ECEDEF; --color-fg-muted: #A4A9B4; --color-bg: #17181B; --color-panel: #1F2125; --color-border-line: #2E3138;
+    --cds-chart-grid: #2A2D33; --cds-chart-axis: #474B55; --cds-text-secondary: #A4A9B4; --cds-surface-popover: #26282D; --cds-border: #3A3D45;
+  }
+  body { margin: 0; background: var(--color-bg); color: var(--color-fg); }
+  #dash-root { padding: 20px; max-width: 1280px; margin: 0 auto; }
+  .dash-select { font: inherit; padding: 6px 28px 6px 10px; border: 1px solid var(--color-border-line); border-radius: 8px; background-color: var(--color-panel); color: var(--color-fg); }
+  .dash-skeleton { color: transparent !important; background: var(--color-border-line); border-radius: 4px; }
+  #harness-log { display: none; }
+  #site-foot { max-width: 1280px; margin: 0 auto; padding: 8px 20px 28px; font: 12px system-ui, sans-serif; color: var(--color-fg-muted); }
+</style>
+</head>
+<body>
+<div id="harness-log"></div>
+<div id="dash-root"></div>
+<div id="site-foot">SupeRR Selector Season 2 · Round 1. Data: the supplied challenge data pack and Cricsheet (cricsheet.org, CC BY-SA 4.0).</div>
+<script>
+(async function () {
+  const log = (m) => { document.getElementById('harness-log').textContent += m + '\n'; console.error(m); };
+  window.__errors = [];
+  window.addEventListener('error', (e) => { window.__errors.push(String(e.message)); log('ERROR ' + e.message); });
+  const q = new URLSearchParams(location.search);
+  if (q.get('theme') === 'dark') document.documentElement.dataset.theme = 'dark';
+  const [html, eda, batters, bowlers] = await Promise.all([
+    fetch('dashboard.html').then((r) => r.text()),
+    fetch('data/eda.json').then((r) => r.json()),
+    fetch('data/batters.json').then((r) => r.json()),
+    fetch('data/bowlers.json').then((r) => r.json()),
+  ]);
+  const loaders = {}, draws = {}, dataFns = [];
+  const params = { comp: 'All', batter: '2258', bowler: '1612', bsit: 'death', wsit: 'death', minballs: 120, dphase: 'Death' };
+  const files = { batters: batters.rows, bowlers: bowlers.rows };
+  const cache = {};
+  function data(id) {
+    if (cache[id]) return cache[id];
+    let rows;
+    if (files[id]) rows = files[id];
+    else if (loaders[id]) rows = loaders[id]({ answer: eda });
+    else return { status: 'missing', data: [] };
+    const out = { status: 'ok', data: rows, columns: rows.length ? Object.keys(rows[0]) : [] };
+    cache[id] = out;
+    return out;
+  }
+  const visible = (el) => !el.closest('[hidden]');
+  function runDraws() {
+    Object.entries(draws).forEach(([name, fn]) => {
+      document.querySelectorAll('[data-draw="' + name + '"]').forEach((el) => {
+        if (!visible(el)) return;
+        try { fn(el); } catch (e) { window.__errors.push(name + ': ' + e.message); log('DRAW ' + name + ': ' + e.stack); }
+      });
+    });
+  }
+  function rerun() { dataFns.forEach((f) => { try { f(); } catch (e) { log('ONDATA ' + e.stack); } }); runDraws(); }
+  window.dash = {
+    loader: (id, o) => { loaders[id] = o.fn; },
+    draw: (name, fn) => { if (fn) draws[name] = typeof fn === 'function' ? fn : (el) => fn.update(el, fn.mount(el)); else runDraws(); },
+    onData: (fn) => { dataFns.push(fn); },
+    data, params: () => ({ ...params }),
+    setParams: (o) => { Object.assign(params, o); rerun(); },
+    resetParams: () => {}, setLink: () => {}, refresh: () => {}, calc: () => {}, colors: [],
+  };
+  const root = document.getElementById('dash-root');
+  root.innerHTML = html;
+  const scripts = Array.from(root.querySelectorAll('script'));
+  scripts.forEach((s) => { try { new Function(s.textContent)(); } catch (e) { window.__errors.push('script: ' + e.message); log('SCRIPT ' + e.stack); } s.remove(); });
+  rerun();
+  new MutationObserver(() => runDraws()).observe(root, { attributes: true, attributeFilter: ['hidden'], subtree: true });
+  window.__ready = true;
+})();
+</script>
+</body>
+</html>

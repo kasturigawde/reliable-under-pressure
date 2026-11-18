@@ -1,0 +1,1554 @@
+<meta name="dash-one-writer">
+<style>
+/* Layout: navy-to-royal-blue hero band with a pink sash, then a tab bar and card grids. */
+.rr {
+  --rr-pink: #EA1A85;
+  --rr-blue: #254AA5;
+  --rr-navy: #0A1C3F;
+  --rr-gold: #CBA92B;
+  --rr-sky: #6C9BF2;
+  --rr-blue-ink: color-mix(in srgb, #254AA5 68%, var(--color-fg));
+  --rr-pink-ink: color-mix(in srgb, #EA1A85 86%, var(--color-fg));
+  --rr-pink-wash: color-mix(in srgb, #EA1A85 9%, var(--color-panel));
+  --rr-blue-wash: color-mix(in srgb, #254AA5 9%, var(--color-panel));
+  --rr-band: color-mix(in srgb, #254AA5 7%, transparent);
+  display: grid;
+  gap: var(--cds-gap-lg);
+  font-family: var(--font-anthropic-sans);
+  color: var(--color-fg);
+}
+.rr * { box-sizing: border-box; }
+.rr [hidden] { display: none !important; }
+.rr > *, .rr-hero > *, .rr-section > * { min-width: 0; }
+@media (max-width: 620px) {
+  .rr-hero::before { right: -170px; width: 200px; opacity: 0.6; }
+  .rr-hero::after { right: 20px; opacity: 0.6; }
+  .rr-stat b { font-size: 22px; }
+}
+.rr-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: calc(var(--cds-radius) * 1.5);
+  padding: clamp(20px, 4vw, 38px);
+  background: linear-gradient(125deg, #0A1C3F 0%, #14317A 55%, #254AA5 100%);
+  color: #FFFFFF;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+}
+.rr-hero::before {
+  content: "";
+  position: absolute;
+  right: -90px;
+  top: -60px;
+  width: 230px;
+  height: 200%;
+  background: linear-gradient(180deg, #EA1A85 0%, #B8106A 100%);
+  transform: rotate(20deg);
+}
+.rr-hero::after {
+  content: "";
+  position: absolute;
+  right: 150px;
+  top: -60px;
+  width: 6px;
+  height: 200%;
+  background: #CBA92B;
+  transform: rotate(20deg);
+}
+.rr-hero > * { position: relative; z-index: 1; }
+.rr-eyebrow {
+  color: #E9C95A;
+  font-size: var(--cds-font-size-caption);
+  font-weight: var(--cds-font-weight-medium);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.rr-title {
+  margin: 0;
+  font-family: var(--font-anthropic-serif);
+  font-weight: 400;
+  font-size: clamp(28px, 4.2vw, 46px);
+  line-height: 1.08;
+  text-wrap: balance;
+  max-width: 18ch;
+}
+.rr-title em { font-style: normal; color: #FF7FBF; }
+.rr-lede { margin: 0; max-width: 62ch; color: rgba(255, 255, 255, 0.88); line-height: 1.55; }
+.rr-lede b { color: #FFFFFF; font-variant-numeric: tabular-nums; }
+.rr-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+  gap: 10px;
+  max-width: 820px;
+}
+.rr-stat {
+  padding: 12px 14px;
+  border-radius: var(--cds-radius);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  display: grid;
+  gap: 2px;
+}
+.rr-stat b {
+  font-family: var(--font-anthropic-serif);
+  font-weight: 400;
+  font-size: 26px;
+  font-variant-numeric: tabular-nums;
+  color: #FFFFFF;
+}
+.rr-stat span { font-size: var(--cds-font-size-caption); color: rgba(255, 255, 255, 0.72); letter-spacing: 0.04em; }
+.rr-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border-line);
+}
+.rr-tabs { display: flex; flex-wrap: wrap; gap: 4px; }
+.rr-tab {
+  appearance: none;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: var(--cds-font-weight-medium);
+  color: var(--color-fg-muted);
+  padding: 10px 12px 9px;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+}
+.rr-tab:hover { color: var(--color-fg); }
+.rr-tab[aria-selected="true"] { color: var(--rr-pink-ink); border-bottom-color: var(--rr-pink); }
+.rr-tab:focus-visible, .rr-seg button:focus-visible, .rr tr[data-key]:focus-visible { outline: 2px solid var(--rr-pink); outline-offset: 2px; }
+.rr-seg { display: inline-flex; border: 1px solid var(--color-border-line); border-radius: 999px; padding: 3px; gap: 2px; margin-bottom: 8px; }
+.rr-seg button {
+  appearance: none;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: var(--cds-font-size-caption);
+  font-weight: var(--cds-font-weight-medium);
+  color: var(--color-fg-muted);
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.rr-seg button[aria-pressed="true"] { background: var(--rr-blue); color: #FFFFFF; }
+.rr-seglabel { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin-right: 8px; }
+.rr-section { display: grid; gap: var(--cds-gap-lg); }
+.rr-sechead { display: grid; gap: 4px; }
+.rr-sechead h2 {
+  margin: 0;
+  font-family: var(--font-anthropic-serif);
+  font-weight: 400;
+  font-size: var(--cds-font-size-title);
+  text-wrap: balance;
+}
+.rr-sechead p { margin: 0; color: var(--color-fg-muted); max-width: 70ch; line-height: 1.5; }
+.rr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 430px), 1fr)); gap: var(--cds-gap-lg); }
+.rr-card {
+  background: var(--color-panel);
+  border: 1px solid var(--color-border-line);
+  border-radius: var(--cds-radius);
+  padding: var(--cds-pad-lg);
+  min-width: 0;
+  display: grid;
+  gap: var(--cds-gap-sm);
+  align-content: start;
+}
+.rr-card h3 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); text-wrap: balance; }
+.rr-sub { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); line-height: 1.45; }
+.rr-note { margin: 0; font-size: var(--cds-font-size-body); line-height: 1.5; max-width: 70ch; }
+.rr-note b { font-variant-numeric: tabular-nums; color: var(--rr-pink-ink); }
+.rr-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(138px, 1fr)); gap: 10px; }
+.rr-tile {
+  background: var(--color-panel);
+  border: 1px solid var(--color-border-line);
+  border-radius: var(--cds-radius);
+  padding: 12px 14px;
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.rr-tile span { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); letter-spacing: 0.03em; }
+.rr-tile span::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--rr-pink); margin-right: 6px; vertical-align: 1px; }
+.rr-tile b { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: 26px; font-variant-numeric: tabular-nums; }
+.rr-chart { position: relative; min-height: 240px; min-width: 0; }
+.rr-chart.rr-tall { min-height: 340px; }
+.rr-svg { display: block; overflow: visible; }
+.rr-svg text { fill: var(--color-fg-muted); font-size: 11px; font-family: var(--font-anthropic-sans); }
+.rr-svg .rr-axis text, .rr-svg .rr-axis-text { fill: var(--cds-text-secondary); font-size: var(--cds-font-size-caption); }
+.rr-svg .rr-axis .domain, .rr-svg .rr-axis .tick line { stroke: var(--cds-chart-axis); }
+.rr-svg .rr-axis .tick line.rr-gridline { stroke: var(--cds-chart-grid); }
+.rr-svg .rr-val { fill: var(--color-fg); font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+.rr-svg .rr-bandlab { fill: var(--rr-blue-ink); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+.rr-svg .rr-axlabel { fill: var(--cds-text-secondary); font-size: var(--cds-font-size-caption); }
+.rr-svg .rr-ptlab { fill: var(--color-fg); font-size: 11px; font-weight: 600; paint-order: stroke; stroke: var(--color-panel); stroke-width: 3px; }
+.rr-svg .rr-zero { stroke: var(--cds-chart-reference); stroke-dasharray: 4 3; }
+.rr-wait, .rr-fail { display: grid; place-items: center; min-height: 200px; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+.rr-tip {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  background: var(--cds-surface-popover);
+  border: 1px solid var(--cds-border);
+  box-shadow: var(--cds-shadow-popover);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: var(--cds-font-size-caption);
+  color: var(--color-fg);
+  display: grid;
+  gap: 3px;
+  min-width: 150px;
+}
+.rr-tip-h { font-weight: 600; }
+.rr-tip-r { display: flex; justify-content: space-between; gap: 14px; color: var(--cds-text-secondary); }
+.rr-tip-r b { color: var(--color-fg); font-variant-numeric: tabular-nums; font-weight: 600; }
+.rr-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.rr-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.rr-sw { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.rr-sw.pink { background: var(--rr-pink); }
+.rr-sw.blue { background: var(--rr-blue); }
+.rr-sw.gold { background: var(--rr-gold); }
+.rr-sw.sky { background: var(--rr-sky); }
+.rr-sw.navy { background: #5A6A8C; }
+.rr-sw.rose { background: #F7A8D0; }
+.rr-sw.steel { background: #B8C0CF; }
+.rr-sw.dot { border-radius: 50%; }
+.rr-tablewrap { overflow-x: auto; min-width: 0; }
+.rr table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-body); }
+.rr th {
+  text-align: left;
+  font-size: var(--cds-font-size-caption);
+  font-weight: var(--cds-font-weight-medium);
+  color: var(--color-fg-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--color-border-line);
+  white-space: nowrap;
+}
+.rr td { padding: 8px 10px; border-bottom: 1px solid var(--color-border-line); vertical-align: top; }
+.rr th.num, .rr td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rr tbody tr:hover td { background: var(--rr-pink-wash); }
+.rr tr.rr-sel td { background: var(--rr-blue-wash); }
+.rr tr.rr-click { cursor: pointer; }
+.rr-id { font-variant-numeric: tabular-nums; color: var(--rr-blue-ink); font-weight: 600; white-space: nowrap; }
+.rr-col { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; white-space: nowrap; }
+.rr-cellbar { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
+.rr-cellbar i { display: block; height: 8px; border-radius: 4px; background: var(--rr-pink); min-width: 2px; }
+.rr-cellbar.blue i { background: var(--rr-blue); }
+.rr-pos { color: var(--color-ok); font-weight: 600; }
+.rr-neg { color: var(--color-bad); font-weight: 600; }
+.rr-player { display: grid; gap: var(--cds-gap-md); }
+.rr-playerhead { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: end; justify-content: space-between; }
+.rr-playername { margin: 0; font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); }
+.rr-playerteam { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+.rr-controls { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: end; }
+.rr-controls label { display: grid; gap: 4px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); min-width: 0; }
+.rr-controls .dash-select { max-width: 100%; }
+.rr-divider { height: 1px; background: var(--color-border-line); }
+.rr-kicker { font-size: var(--cds-font-size-caption); letter-spacing: 0.12em; text-transform: uppercase; color: var(--rr-pink-ink); font-weight: var(--cds-font-weight-medium); }
+.rr details summary { cursor: pointer; color: var(--rr-blue-ink); font-weight: var(--cds-font-weight-medium); }
+.rr details ul { margin: 8px 0 0; padding-left: 18px; line-height: 1.6; color: var(--color-fg-muted); max-width: 75ch; }
+@media (prefers-reduced-motion: no-preference) {
+  .rr-svg path.rr-line { transition: opacity var(--cds-dur-slow) var(--cds-ease-out); }
+}
+</style>
+
+<div class="rr">
+  <header class="rr-hero" id="hero">
+    <div class="rr-eyebrow">Rajasthan Royals · SupeRR Selector Season 2</div>
+    <h1 class="rr-title">SupeRR Selector <em>Data Explorer</em></h1>
+    <p class="rr-lede"><b data-draw="kpi" class="dash-skeleton" data-source="scope" data-field="matches" data-where="comp=All" data-fmt="int">—</b> matches and <b data-draw="kpi" class="dash-skeleton" data-source="scope" data-field="deliveries" data-where="comp=All" data-fmt="int">—</b> deliveries of IPL and T20I cricket from 2022 to 2026. Teams score <b data-draw="kpi" class="dash-skeleton" data-source="scope" data-field="run_rate" data-where="comp=All" data-fmt="dec2">—</b> runs an over, and <b data-draw="kpi" class="dash-skeleton" data-source="scope" data-field="speed_missing_pct" data-where="comp=All" data-fmt="pct">—</b> of deliveries carry no bowling speed, so speed is read only where it was captured.</p>
+    <div class="rr-stats">
+      <div class="rr-stat"><b data-draw="kpi" class="dash-skeleton" data-source="scope" data-field="innings" data-where="comp=All" data-fmt="int">—</b><span>Innings</span></div>
+      <div class="rr-stat"><b data-draw="kpi" class="dash-skeleton" data-source="scope" data-field="legal_balls" data-where="comp=All" data-fmt="int">—</b><span>Legal balls</span></div>
+      <div class="rr-stat"><b data-draw="kpi" class="dash-skeleton" data-source="scope" data-field="bowler_wickets" data-where="comp=All" data-fmt="int">—</b><span>Bowler wickets</span></div>
+      <div class="rr-stat"><b data-draw="kpi" class="dash-skeleton" data-source="scope" data-field="batter_runs" data-where="comp=All" data-fmt="int">—</b><span>Runs off the bat</span></div>
+      <div class="rr-stat"><b data-draw="kpi" class="dash-skeleton" data-source="scope" data-field="players" data-where="comp=All" data-fmt="int">—</b><span>Players</span></div>
+      <div class="rr-stat"><b data-draw="kpi" class="dash-skeleton" data-source="scope" data-field="run_outs" data-where="comp=All" data-fmt="int">—</b><span>Run outs</span></div>
+    </div>
+  </header>
+
+  <nav class="rr-bar" aria-label="Dashboard sections">
+    <div class="rr-tabs" role="tablist">
+      <button class="rr-tab" role="tab" id="tab-ratings" data-tab="ratings" aria-selected="true">Pressure ratings</button>
+      <button class="rr-tab" role="tab" id="tab-overview" data-tab="overview" aria-selected="false">Overview &amp; data quality</button>
+      <button class="rr-tab" role="tab" id="tab-innings" data-tab="innings" aria-selected="false">Innings progression</button>
+      <button class="rr-tab" role="tab" id="tab-matchups" data-tab="matchups" aria-selected="false">Matchups &amp; deliveries</button>
+      <button class="rr-tab" role="tab" id="tab-players" data-tab="players" aria-selected="false">Player deep-dive</button>
+    </div>
+    <div class="rr-segwrap" id="comp-filter">
+      <span class="rr-seglabel">Competition</span>
+      <span class="rr-seg" role="group" aria-label="Competition">
+        <button data-comp="All" aria-pressed="true">All</button>
+        <button data-comp="IPL" aria-pressed="false">IPL</button>
+        <button data-comp="T20I" aria-pressed="false">T20I</button>
+      </span>
+    </div>
+  </nav>
+
+  <!-- ===================================================== 0. PRESSURE RATINGS (version 2) -->
+  <section class="rr-section" id="ratings" data-section="ratings">
+    <div class="rr-sechead">
+      <span class="rr-kicker">Round 1 submission · version 2</span>
+      <h2>Reliable under pressure</h2>
+      <p>How we define pressure, how every ball is judged fairly, which skills carried into the next season, and the two top 10s. A rating is runs per 100 pressure balls above an average player in the same situation, converted to the IPL scale, taken at the cautious end (10th percentile) of the player's range.</p>
+    </div>
+    <div class="rr-tiles">
+      <div class="rr-tile"><span>Deliveries rated</span><b data-draw="kpi" class="dash-skeleton" data-source="v2_kpi" data-field="deliveries" data-where="id=all" data-fmt="int">—</b></div>
+      <div class="rr-tile"><span>Competitions, one IPL scale</span><b data-draw="kpi" class="dash-skeleton" data-source="v2_kpi" data-field="competitions" data-where="id=all" data-fmt="int">—</b></div>
+      <div class="rr-tile"><span>Win swing on pressure balls</span><b data-draw="kpi" class="dash-skeleton" data-source="v2_kpi" data-field="pressure_share" data-where="id=all" data-fmt="pct">—</b></div>
+      <div class="rr-tile"><span>Predicts 2025-26: batters</span><b data-draw="kpi" class="dash-skeleton" data-source="v2_kpi" data-field="cv_batters" data-where="id=all" data-fmt="dec2">—</b></div>
+      <div class="rr-tile"><span>Predicts 2025-26: bowlers</span><b data-draw="kpi" class="dash-skeleton" data-source="v2_kpi" data-field="cv_bowlers" data-where="id=all" data-fmt="dec2">—</b></div>
+    </div>
+    <div class="rr-grid">
+      <article class="rr-card" id="card-v2bat">
+        <h3>Top 10 batters under pressure</h3>
+        <p class="rr-sub">Players with 150+ pressure balls who have played since 2025, ranked strictly by the rating.</p>
+        <div class="rr-tablewrap">
+          <table data-source="v2_batters" data-row-key="player_id">
+            <thead><tr><th>#</th><th>Batter</th><th>Role</th><th class="num">Rating</th><th class="num">Expected</th><th class="num">Pressure balls</th></tr></thead>
+            <tbody data-draw="v2top" data-source="v2_batters" data-kind="batters"></tbody>
+          </table>
+        </div>
+      </article>
+      <article class="rr-card" id="card-v2bowl">
+        <h3>Top 10 bowlers under pressure</h3>
+        <p class="rr-sub">Same rules. Role shows bowling type and the phase a bowler is used in most.</p>
+        <div class="rr-tablewrap">
+          <table data-source="v2_bowlers" data-row-key="player_id">
+            <thead><tr><th>#</th><th>Bowler</th><th>Role</th><th class="num">Rating</th><th class="num">Expected</th><th class="num">Pressure balls</th></tr></thead>
+            <tbody data-draw="v2top" data-source="v2_bowlers" data-kind="bowlers"></tbody>
+          </table>
+        </div>
+      </article>
+    </div>
+    <div class="rr-grid">
+      <article class="rr-card" id="card-v2index">
+        <h3>How pressure is defined</h3>
+        <p class="rr-note"><b>Pressure = Balance × Clock × Wicket strain.</b> Balance: runs needed against what an average side scores from here. Clock: how few balls are left in the chase. Wicket strain: wickets down beyond normal, first innings only. The top 20% of balls are pressure balls.</p>
+        <p class="rr-sub">Share of all real win-probability swing that falls on the top 20% of balls under each definition.</p>
+        <div class="rr-chart" data-draw="v2index" data-source="v2_index"></div>
+      </article>
+      <article class="rr-card" id="card-v2dots">
+        <h3>Under pressure, batters stall rather than get out</h3>
+        <p class="rr-sub">Runs per 100 balls against the situation model's expectation, by the team's run of dot balls before the ball. Dismissals do not rise.</p>
+        <div class="rr-chart" data-draw="v2dots" data-source="v2_dots"></div>
+      </article>
+    </div>
+    <div class="rr-grid">
+      <article class="rr-card" id="card-v2tests">
+        <h3>Only skills that carry into next season are rated</h3>
+        <p class="rr-sub">Rank correlation between a player's 2022-24 skill and his 2025-26 pressure value. <span class="rr-legend"><span><i class="rr-sw pink"></i>used, clear signal</span><span><i class="rr-sw blue"></i>used</span></span> Grey: dropped.</p>
+        <div class="rr-chart" data-draw="v2tests" data-source="v2_tests"></div>
+      </article>
+      <article class="rr-card" id="card-v2offsets">
+        <h3>Every competition on the IPL scale</h3>
+        <p class="rr-sub">Runs per 100 balls above expectation for the same batters, compared with the IPL. Positive means easier than the IPL; pink means as hard as the IPL or harder. Hover a bar for the bowlers' figure and how many players link each league.</p>
+        <div class="rr-chart" data-draw="v2offsets" data-source="v2_offsets"></div>
+      </article>
+    </div>
+    <article class="rr-card" id="card-v2all">
+      <div class="rr-playerhead">
+        <div>
+          <h3>All rated players</h3>
+          <p class="rr-sub">The best 60 batters and bowlers by rating, with the expected value and ceiling of each range.</p>
+        </div>
+        <div class="rr-controls">
+          <label for="rr-rkind">List
+            <select class="dash-select" id="rr-rkind" aria-label="List">
+              <option value="batters">Batters</option>
+              <option value="bowlers">Bowlers</option>
+            </select>
+          </label>
+          <label for="rr-rrole">Role
+            <select class="dash-select" id="rr-rrole" data-draw="v2rolesel" data-source="v2_batters" aria-label="Role"></select>
+          </label>
+        </div>
+      </div>
+      <div class="rr-tablewrap">
+        <table data-source="v2_batters" data-row-key="player_id">
+          <thead><tr><th>#</th><th>Player</th><th>Role</th><th class="num">Rating</th><th class="num">Expected</th><th class="num">Ceiling</th><th class="num">Pressure balls</th><th class="num">Matches</th><th class="num">IPL share</th><th class="num">Wins added /100</th></tr></thead>
+          <tbody data-draw="v2all" data-source="v2_batters"></tbody>
+        </table>
+      </div>
+    </article>
+    <article class="rr-card" id="card-v2checks">
+      <h3>Famous names, tested rather than forced in</h3>
+      <p class="rr-sub">Pressure balls in chases, 2022-26. Kohli rarely gets out but scores a little below what the moment needs; a big-chase build-up measure was tested for anchors like him, predicted only weakly and moved him lower, so it was not added.</p>
+      <div class="rr-tablewrap">
+        <table data-source="v2_checks" data-row-key="player">
+          <thead><tr><th>Player</th><th class="num">Rank among rated batters</th><th class="num">Balls</th><th class="num">Strike rate</th><th class="num">Expected SR</th><th class="num">Balls per dismissal</th><th class="num">Value /100 balls</th></tr></thead>
+          <tbody data-draw="v2checks" data-source="v2_checks"></tbody>
+        </table>
+      </div>
+    </article>
+  </section>
+
+  <!-- ===================================================== 1. OVERVIEW -->
+  <section class="rr-section" id="overview" data-section="overview" hidden>
+    <div class="rr-sechead">
+      <span class="rr-kicker">What is in the data pack</span>
+      <h2>Overview &amp; data quality</h2>
+      <p>Scope of the six CSVs and every quirk that changes a number if it is not handled. The tiles follow the competition filter.</p>
+    </div>
+    <div class="rr-tiles" id="overview-tiles">
+      <div class="rr-tile"><span>Matches with ball data</span><b data-draw="kpi" class="dash-skeleton" data-source="scope" data-field="matches" data-scope="comp" data-fmt="int">—</b></div>
+      <div class="rr-tile"><span>Matches scheduled</span><b data-draw="kpi" class="dash-skeleton" data-source="scope" data-field="matches_scheduled" data-scope="comp" data-fmt="int">—</b></div>
+      <div class="rr-tile"><span>Deliveries</span><b data-draw="kpi" class="dash-skeleton" data-source="scope" data-field="deliveries" data-scope="comp" data-fmt="int">—</b></div>
+      <div class="rr-tile"><span>Bowler wickets</span><b data-draw="kpi" class="dash-skeleton" data-source="scope" data-field="bowler_wickets" data-scope="comp" data-fmt="int">—</b></div>
+      <div class="rr-tile"><span>Run rate (est.)</span><b data-draw="kpi" class="dash-skeleton" data-source="scope" data-field="run_rate" data-scope="comp" data-fmt="dec2">—</b></div>
+      <div class="rr-tile"><span>No speed recorded</span><b data-draw="kpi" class="dash-skeleton" data-source="scope" data-field="speed_missing_pct" data-scope="comp" data-fmt="pct">—</b></div>
+    </div>
+    <div class="rr-grid">
+      <article class="rr-card" id="card-years">
+        <h3>Matches with ball data by year</h3>
+        <p class="rr-sub">All competitions, regardless of the filter.</p>
+        <div class="rr-legend"><span><i class="rr-sw pink"></i>IPL</span><span><i class="rr-sw blue"></i>T20I</span><span><i class="rr-sw gold"></i>A-Team</span></div>
+        <div class="rr-chart" data-draw="years" data-source="by_year"></div>
+      </article>
+      <article class="rr-card" id="card-speedyear">
+        <h3>Share of deliveries with a usable speed</h3>
+        <p class="rr-sub">Speed is 0 when it was not captured, and a few values are impossible (over 165 km/h). Both are excluded.</p>
+        <div class="rr-legend"><span><i class="rr-sw pink"></i>IPL</span><span><i class="rr-sw blue"></i>T20I</span></div>
+        <div class="rr-chart" data-draw="speedyear" data-source="by_year"></div>
+      </article>
+      <article class="rr-card" id="card-extras">
+        <h3>Extras by type</h3>
+        <p class="rr-sub">Deliveries. A wide or a no-ball is not a legal ball, so it does not count towards the over.</p>
+        <div class="rr-chart" data-draw="extras" data-source="extras"></div>
+      </article>
+      <article class="rr-card" id="card-dismissals">
+        <h3>How wickets fall</h3>
+        <p class="rr-sub">All wickets, super overs excluded. Run outs and retirements are not credited to the bowler.</p>
+        <div class="rr-chart" data-draw="dismissals" data-source="dismissals"></div>
+      </article>
+    </div>
+    <article class="rr-card" id="card-quality">
+      <h3>Data quality register</h3>
+      <p class="rr-sub">Each finding was measured on the raw files, and each treatment is applied before any number on this dashboard.</p>
+      <div class="rr-tablewrap">
+        <table data-source="quality" data-row-key="id">
+          <thead><tr><th data-field="id">#</th><th data-field="column">Where</th><th data-field="finding">Finding</th><th class="num" data-field="count">Rows</th><th data-field="impact">Why it matters</th><th data-field="treatment">Treatment</th></tr></thead>
+          <tbody data-draw="quality"></tbody>
+        </table>
+      </div>
+    </article>
+  </section>
+
+  <!-- ===================================================== 2. INNINGS -->
+  <section class="rr-section" id="innings" data-section="innings" hidden>
+    <div class="rr-sechead">
+      <span class="rr-kicker">Match state, over by over</span>
+      <h2>Innings progression</h2>
+      <p>How scoring, wickets, boundaries and pace shift across the 20 overs, setting and chasing. Shaded bands mark the powerplay (1 to 6) and the death (16 to 20). Super overs are excluded.</p>
+    </div>
+    <div class="rr-grid">
+      <article class="rr-card" id="card-rrover">
+        <h3>Run rate by over</h3>
+        <div class="rr-legend"><span><i class="rr-sw pink"></i>1st innings</span><span><i class="rr-sw blue"></i>2nd innings (chase)</span></div>
+        <div class="rr-chart" data-draw="rrover" data-source="by_over"></div>
+      </article>
+      <article class="rr-card" id="card-scoreover">
+        <h3>Average score at the end of each over</h3>
+        <p class="rr-sub">Innings that ended early drop out of later overs, so late overs average fewer innings.</p>
+        <div class="rr-legend"><span><i class="rr-sw pink"></i>1st innings</span><span><i class="rr-sw blue"></i>2nd innings (chase)</span></div>
+        <div class="rr-chart" data-draw="scoreover" data-source="by_over"></div>
+      </article>
+      <article class="rr-card" id="card-wktsover">
+        <h3>Wickets per innings in each over</h3>
+        <div class="rr-legend"><span><i class="rr-sw pink"></i>1st innings</span><span><i class="rr-sw blue"></i>2nd innings (chase)</span></div>
+        <div class="rr-chart" data-draw="wktsover" data-source="by_over"></div>
+      </article>
+      <article class="rr-card" id="card-speedover">
+        <h3>Average bowling speed by over, km/h</h3>
+        <p class="rr-sub">1st innings, deliveries with a usable speed only.</p>
+        <div class="rr-legend"><span><i class="rr-sw blue"></i>Pace</span><span><i class="rr-sw pink"></i>Spin</span></div>
+        <div class="rr-chart" data-draw="speedover" data-source="by_over"></div>
+      </article>
+      <article class="rr-card" id="card-outcomes">
+        <h3>What happens on a ball, by phase</h3>
+        <div class="rr-legend"><span><i class="rr-sw steel"></i>Dot</span><span><i class="rr-sw sky"></i>Single</span><span><i class="rr-sw navy"></i>2s / 3s</span><span><i class="rr-sw blue"></i>Four</span><span><i class="rr-sw pink"></i>Six</span><span><i class="rr-sw gold"></i>Wicket</span><span><i class="rr-sw rose"></i>Wide / no-ball</span></div>
+        <div class="rr-chart" data-draw="outcomes" data-source="outcomes"></div>
+      </article>
+      <article class="rr-card" id="card-wkheat">
+        <h3>Run rate by wickets already down</h3>
+        <p class="rr-sub">Each cell is the run rate on balls bowled with that many wickets down, in that phase. Point at a cell for its sample size and wicket rate.</p>
+        <div class="rr-chart rr-tall" data-draw="wkheat" data-source="wk_phase"></div>
+      </article>
+    </div>
+    <article class="rr-card" id="card-chase">
+      <h3>Chases by required run rate</h3>
+      <p class="rr-note">Across all competitions, a chase that faces an ask under 6 an over is won <b data-draw="kpi" class="dash-skeleton" data-source="chase" data-field="win_pct" data-where="comp=All&amp;band_order=0" data-fmt="pct">—</b> of the time. Once the ask passes 15, only <b data-draw="kpi" class="dash-skeleton" data-source="chase" data-field="win_pct" data-where="comp=All&amp;band_order=5" data-fmt="pct">—</b> are won, and the wicket rate climbs to <b data-draw="kpi" class="dash-skeleton" data-source="chase" data-field="wicket_pct" data-where="comp=All&amp;band_order=5" data-fmt="pct">—</b> a ball.</p>
+      <p class="rr-sub">A chase counts in every band it passes through. Win % is the share of those chases the batting side went on to win.</p>
+      <div class="rr-tablewrap">
+        <table data-source="chase" data-row-key="comp,band_order">
+          <thead><tr><th data-field="required_rate">Required rate</th><th class="num" data-field="chases">Chases</th><th class="num" data-field="legal_balls">Legal balls</th><th class="num" data-field="run_rate">Run rate</th><th class="num" data-field="wicket_pct">Wicket % per ball</th><th class="num" data-field="boundary_pct">Boundary %</th><th class="num" data-field="win_pct">Chase win %</th></tr></thead>
+          <tbody data-draw="chase"></tbody>
+        </table>
+      </div>
+    </article>
+  </section>
+
+  <!-- ===================================================== 3. MATCHUPS -->
+  <section class="rr-section" id="matchups" data-section="matchups" hidden>
+    <div class="rr-sechead">
+      <span class="rr-kicker">Tactics and delivery mechanics</span>
+      <h2>Matchups &amp; deliveries</h2>
+      <p>Batting hand against bowling type, the risk and reward of each stroke, and which deliveries keep scoring down in each phase. Super overs are excluded.</p>
+    </div>
+    <div class="rr-grid">
+      <article class="rr-card" id="card-matchheat">
+        <h3>Strike rate by bowling type and batting hand</h3>
+        <p class="rr-sub">Darker pink means faster scoring. Point at a cell for balls faced and dismissal rate.</p>
+        <div class="rr-chart rr-tall" data-draw="matchheat" data-source="matchup"></div>
+      </article>
+      <article class="rr-card" id="card-strokes">
+        <h3>Stroke risk against reward</h3>
+        <p class="rr-sub">Each dot is a stroke against pace or spin, sized by balls faced (150 or more). Up is faster scoring, right is more dismissals per ball.</p>
+        <div class="rr-legend"><span><i class="rr-sw blue dot"></i>Against pace</span><span><i class="rr-sw pink dot"></i>Against spin</span></div>
+        <div class="rr-chart rr-tall" data-draw="strokes" data-source="strokes"></div>
+      </article>
+    </div>
+    <article class="rr-card" id="card-delivery">
+      <div class="rr-playerhead">
+        <div>
+          <h3>Delivery styles, cheapest first</h3>
+          <p class="rr-sub">Economy, dot-ball % and wicket % per legal ball for styles with 150 or more legal balls.</p>
+        </div>
+        <div class="rr-controls">
+          <label for="rr-dphase">Phase
+            <select class="dash-select" id="rr-dphase" aria-label="Phase">
+              <option value="All phases">All phases</option>
+              <option value="Powerplay">Powerplay</option>
+              <option value="Middle">Middle</option>
+              <option value="Death">Death</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="rr-tablewrap">
+        <table data-source="delivery" data-row-key="comp,delivery_style,phase">
+          <thead><tr><th data-field="delivery_style">Delivery</th><th class="num" data-field="legal_balls">Legal balls</th><th class="num" data-field="economy">Economy</th><th class="num" data-field="dot_pct">Dot %</th><th class="num" data-field="wicket_pct">Wicket %</th></tr></thead>
+          <tbody data-draw="delivery"></tbody>
+        </table>
+      </div>
+    </article>
+  </section>
+
+  <!-- ===================================================== 4. PLAYERS -->
+  <section class="rr-section" id="players" data-section="players" hidden>
+    <div class="rr-sechead">
+      <span class="rr-kicker">Normal against high-leverage</span>
+      <h2>Player deep-dive</h2>
+      <p>Each player's usual level beside the same numbers in the situations that decide matches. Players are measured against the whole field in the same situation, because everyone scores faster at the death. IPL and T20I combined; batters with 60+ balls faced and bowlers with 60+ legal balls.</p>
+    </div>
+
+    <article class="rr-card rr-player" id="batter">
+      <div class="rr-playerhead">
+        <div>
+          <span class="rr-kicker">Batter</span>
+          <h3 class="rr-playername" data-draw="batname">—</h3>
+          <div class="rr-playerteam" data-draw="batteam"></div>
+        </div>
+        <div class="rr-controls">
+          <label for="rr-batter">Batter
+            <select class="dash-select" id="rr-batter" data-draw="batsel" data-source="batters" aria-label="Batter"></select>
+          </label>
+        </div>
+      </div>
+      <div class="rr-tiles">
+        <div class="rr-tile"><span>Balls faced</span><b data-draw="pkpi" class="dash-skeleton" data-source="batters" data-field="balls" data-scope="batter" data-fmt="int">—</b></div>
+        <div class="rr-tile"><span>Runs</span><b data-draw="pkpi" class="dash-skeleton" data-source="batters" data-field="runs" data-scope="batter" data-fmt="int">—</b></div>
+        <div class="rr-tile"><span>Strike rate</span><b data-draw="pkpi" class="dash-skeleton" data-source="batters" data-field="strike_rate" data-scope="batter" data-fmt="dec1">—</b></div>
+        <div class="rr-tile"><span>Dismissals per ball</span><b data-draw="pkpi" class="dash-skeleton" data-source="batters" data-field="dismissal_pct" data-scope="batter" data-fmt="pct2">—</b></div>
+        <div class="rr-tile"><span>Boundary %</span><b data-draw="pkpi" class="dash-skeleton" data-source="batters" data-field="boundary_pct" data-scope="batter" data-fmt="pct">—</b></div>
+        <div class="rr-tile"><span>Dot-ball %</span><b data-draw="pkpi" class="dash-skeleton" data-source="batters" data-field="dot_pct" data-scope="batter" data-fmt="pct">—</b></div>
+      </div>
+      <div class="rr-grid">
+        <div class="rr-card" id="card-batdiv">
+          <h3>Strike rate against the field, by situation</h3>
+          <p class="rr-sub">Pink bars beat the field's strike rate in that situation; blue bars fall short. The label gives balls faced.</p>
+          <div class="rr-chart" data-draw="batdiv" data-source="batters"></div>
+        </div>
+        <div class="rr-card" id="card-battable">
+          <h3>Situational profile</h3>
+          <div class="rr-tablewrap">
+            <table data-source="batters" data-row-key="player_id,situation">
+              <thead><tr><th data-field="situation_label">Situation</th><th class="num" data-field="balls">Balls</th><th class="num" data-field="strike_rate">SR</th><th class="num" data-field="sr_vs_field">vs field</th><th class="num" data-field="dismissal_pct">Out %</th><th class="num" data-field="boundary_pct">4s+6s %</th></tr></thead>
+              <tbody data-draw="battable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="rr-divider"></div>
+      <div class="rr-playerhead">
+        <div>
+          <h3>Peer map: usual strike rate against the chosen situation</h3>
+          <p class="rr-sub">Each dot is a batter with enough balls in that situation. Above the dashed line = faster than the field there. Click a dot to open that batter.</p>
+        </div>
+        <div class="rr-controls">
+          <label for="rr-bsit">Situation
+            <select class="dash-select" id="rr-bsit" aria-label="Batting situation">
+              <option value="death">Death (16-20)</option>
+              <option value="tough">Tough chase (RRR 10+)</option>
+              <option value="behind">Behind par by 10+</option>
+              <option value="pressure">High / extreme pressure</option>
+              <option value="collapse">4+ wickets down</option>
+              <option value="knockout">Knockout match</option>
+              <option value="chase">Chasing</option>
+              <option value="pp">Powerplay (1-6)</option>
+              <option value="mid">Middle (7-15)</option>
+            </select>
+          </label>
+          <label for="rr-minballs">Min balls in situation
+            <select class="dash-select" id="rr-minballs" aria-label="Minimum balls">
+              <option value="60">60</option>
+              <option value="120">120</option>
+              <option value="200">200</option>
+              <option value="300">300</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="rr-grid">
+        <div class="rr-chart rr-tall" data-draw="batpeers" data-source="batters" id="chart-batpeers"></div>
+        <div class="rr-card" id="card-battop">
+          <h3>Top 10 against the field in this situation</h3>
+          <div class="rr-tablewrap">
+            <table data-source="batters" data-row-key="player_id,situation">
+              <thead><tr><th>#</th><th data-field="player">Batter</th><th data-field="team">Latest team</th><th class="num" data-field="balls">Balls</th><th class="num" data-field="strike_rate">SR</th><th class="num" data-field="sr_vs_field">vs field</th></tr></thead>
+              <tbody data-draw="battop"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="rr-card rr-player" id="bowler">
+      <div class="rr-playerhead">
+        <div>
+          <span class="rr-kicker">Bowler</span>
+          <h3 class="rr-playername" data-draw="bowlname">—</h3>
+          <div class="rr-playerteam" data-draw="bowlteam"></div>
+        </div>
+        <div class="rr-controls">
+          <label for="rr-bowler">Bowler
+            <select class="dash-select" id="rr-bowler" data-draw="bowlsel" data-source="bowlers" aria-label="Bowler"></select>
+          </label>
+        </div>
+      </div>
+      <div class="rr-tiles">
+        <div class="rr-tile"><span>Legal balls</span><b data-draw="pkpi" class="dash-skeleton" data-source="bowlers" data-field="legal_balls" data-scope="bowler" data-fmt="int">—</b></div>
+        <div class="rr-tile"><span>Wickets</span><b data-draw="pkpi" class="dash-skeleton" data-source="bowlers" data-field="wickets" data-scope="bowler" data-fmt="int">—</b></div>
+        <div class="rr-tile"><span>Economy</span><b data-draw="pkpi" class="dash-skeleton" data-source="bowlers" data-field="economy" data-scope="bowler" data-fmt="dec2">—</b></div>
+        <div class="rr-tile"><span>Wickets per ball</span><b data-draw="pkpi" class="dash-skeleton" data-source="bowlers" data-field="wicket_pct" data-scope="bowler" data-fmt="pct2">—</b></div>
+        <div class="rr-tile"><span>Dot-ball %</span><b data-draw="pkpi" class="dash-skeleton" data-source="bowlers" data-field="dot_pct" data-scope="bowler" data-fmt="pct">—</b></div>
+        <div class="rr-tile"><span>Boundary % conceded</span><b data-draw="pkpi" class="dash-skeleton" data-source="bowlers" data-field="boundary_pct" data-scope="bowler" data-fmt="pct">—</b></div>
+      </div>
+      <div class="rr-grid">
+        <div class="rr-card" id="card-bowldiv">
+          <h3>Economy against the field, by situation</h3>
+          <p class="rr-sub">Pink bars are cheaper than the field in that situation; blue bars are more expensive. The label gives legal balls.</p>
+          <div class="rr-chart" data-draw="bowldiv" data-source="bowlers"></div>
+        </div>
+        <div class="rr-card" id="card-bowltable">
+          <h3>Situational profile</h3>
+          <div class="rr-tablewrap">
+            <table data-source="bowlers" data-row-key="player_id,situation">
+              <thead><tr><th data-field="situation_label">Situation</th><th class="num" data-field="legal_balls">Balls</th><th class="num" data-field="economy">Econ</th><th class="num" data-field="econ_vs_field">vs field</th><th class="num" data-field="wicket_pct">Wkt %</th><th class="num" data-field="dot_pct">Dot %</th></tr></thead>
+              <tbody data-draw="bowltable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="rr-divider"></div>
+      <div class="rr-playerhead">
+        <div>
+          <h3>Peer map: usual economy against the chosen situation</h3>
+          <p class="rr-sub">Below the dashed line = cheaper than the field there. The minimum-balls filter above applies here too. Click a dot to open that bowler.</p>
+        </div>
+        <div class="rr-controls">
+          <label for="rr-wsit">Situation
+            <select class="dash-select" id="rr-wsit" aria-label="Bowling situation">
+              <option value="death">Death (16-20)</option>
+              <option value="tough">Tough chase (RRR 10+)</option>
+              <option value="behind">Batting side behind par by 10+</option>
+              <option value="pressure">High / extreme pressure</option>
+              <option value="collapse">4+ wickets down</option>
+              <option value="knockout">Knockout match</option>
+              <option value="pp">Powerplay (1-6)</option>
+              <option value="mid">Middle (7-15)</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="rr-grid">
+        <div class="rr-chart rr-tall" data-draw="bowlpeers" data-source="bowlers" id="chart-bowlpeers"></div>
+        <div class="rr-card" id="card-bowltop">
+          <h3>Top 10 cheapest against the field in this situation</h3>
+          <div class="rr-tablewrap">
+            <table data-source="bowlers" data-row-key="player_id,situation">
+              <thead><tr><th>#</th><th data-field="player">Bowler</th><th data-field="team">Latest team</th><th class="num" data-field="legal_balls">Balls</th><th class="num" data-field="economy">Econ</th><th class="num" data-field="econ_vs_field">vs field</th></tr></thead>
+              <tbody data-draw="bowltop"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <details class="rr-card" id="definitions">
+      <summary>How the situations are defined</summary>
+      <ul>
+        <li>Phases: powerplay is overs 1 to 6, middle 7 to 15, death 16 to 20.</li>
+        <li>Tough chase: a ball in the second innings when the required run rate is 10 or more, with targets anchored to the official result.</li>
+        <li>Behind par: the batting side's score before the ball is 10 or more runs below the average score at the same legal ball, for the same innings, competition type and year.</li>
+        <li>High or extreme pressure (exploration tabs): the top 20% of balls on the version 1 pressure index, which combines match balance, balls left, wickets lost and match stakes. The Pressure ratings tab uses version 2: no stakes, and wicket strain in the first innings only.</li>
+        <li>Dismissals are credited to the batter who was out, so a non-striker run out counts against the non-striker. Bowler wickets exclude run outs and retirements.</li>
+        <li>Team run totals are estimates: the data pack does not store how many byes, leg-byes or wide runs were taken. Batter runs and wickets are exact.</li>
+      </ul>
+    </details>
+  </section>
+</div>
+
+<script>
+/* Loaders: the 13 summary tables are bundled in one file, eda.json. Each loader picks its own table. */
+dash.loader('scope', { description: 'Picks the scope table out of eda.json.', fn: ({ answer }) => answer.tables.scope });
+dash.loader('by_year', { description: 'Picks the by_year table out of eda.json.', fn: ({ answer }) => answer.tables.by_year });
+dash.loader('quality', { description: 'Picks the quality table out of eda.json.', fn: ({ answer }) => answer.tables.quality });
+dash.loader('extras', { description: 'Picks the extras table out of eda.json.', fn: ({ answer }) => answer.tables.extras });
+dash.loader('by_over', { description: 'Picks the by_over table out of eda.json.', fn: ({ answer }) => answer.tables.by_over });
+dash.loader('outcomes', { description: 'Picks the outcomes table out of eda.json.', fn: ({ answer }) => answer.tables.outcomes });
+dash.loader('wk_phase', { description: 'Picks the wk_phase table out of eda.json.', fn: ({ answer }) => answer.tables.wk_phase });
+dash.loader('chase', { description: 'Picks the chase table out of eda.json.', fn: ({ answer }) => answer.tables.chase });
+dash.loader('matchup', { description: 'Picks the matchup table out of eda.json.', fn: ({ answer }) => answer.tables.matchup });
+dash.loader('strokes', { description: 'Picks the strokes table out of eda.json.', fn: ({ answer }) => answer.tables.strokes });
+dash.loader('delivery', { description: 'Picks the delivery table out of eda.json.', fn: ({ answer }) => answer.tables.delivery });
+dash.loader('dismissals', { description: 'Picks the dismissals table out of eda.json.', fn: ({ answer }) => answer.tables.dismissals });
+/* Version 2 pressure ratings, added by dashboard/build_v2.py */
+dash.loader('v2_kpi', { description: 'Picks the v2_kpi table out of eda.json (version 2 ratings).', fn: ({ answer }) => answer.tables.v2_kpi });
+dash.loader('v2_index', { description: 'Picks the v2_index table out of eda.json (version 2 ratings).', fn: ({ answer }) => answer.tables.v2_index });
+dash.loader('v2_dots', { description: 'Picks the v2_dots table out of eda.json (version 2 ratings).', fn: ({ answer }) => answer.tables.v2_dots });
+dash.loader('v2_tests', { description: 'Picks the v2_tests table out of eda.json (version 2 ratings).', fn: ({ answer }) => answer.tables.v2_tests });
+dash.loader('v2_offsets', { description: 'Picks the v2_offsets table out of eda.json (version 2 ratings).', fn: ({ answer }) => answer.tables.v2_offsets });
+dash.loader('v2_batters', { description: 'Picks the v2_batters table out of eda.json (version 2 ratings).', fn: ({ answer }) => answer.tables.v2_batters });
+dash.loader('v2_bowlers', { description: 'Picks the v2_bowlers table out of eda.json (version 2 ratings).', fn: ({ answer }) => answer.tables.v2_bowlers });
+dash.loader('v2_checks', { description: 'Picks the v2_checks table out of eda.json (version 2 ratings).', fn: ({ answer }) => answer.tables.v2_checks });
+</script>
+
+<script>
+/* Shared helpers for every drawing. */
+window.RR = (function () {
+  const C = { pink: '#EA1A85', blue: '#254AA5', gold: '#CBA92B', sky: '#6C9BF2', navy: '#5A6A8C', rose: '#F7A8D0', steel: '#B8C0CF' };
+  const F = {
+    int: d3.format(','), dec1: d3.format(',.1f'), dec2: d3.format(',.2f'),
+    pct: (v) => d3.format('.1f')(v) + '%', pct2: (v) => d3.format('.2f')(v) + '%',
+    s1: d3.format('+.1f'), s2: d3.format('+.2f'),
+  };
+  const fmt = (v, k) => (v === null || v === undefined || v === '' || Number.isNaN(+v)) ? '—' : (F[k] || F.int)(+v);
+  const P = () => dash.params();
+  const comp = () => P().comp || 'All';
+  const enc = (v) => encodeURIComponent(String(v));
+  function match(row, where) {
+    return where.split('&').every((part) => {
+      const i = part.indexOf('=');
+      return String(row[decodeURIComponent(part.slice(0, i))]) === decodeURIComponent(part.slice(i + 1));
+    });
+  }
+  function wait(el, d) {
+    if (d.status === 'ok') return false;
+    el.replaceChildren();
+    const p = document.createElement('div');
+    const bad = d.status === 'error' || d.status === 'missing';
+    p.className = bad ? 'rr-fail' : 'rr-wait';
+    p.textContent = bad ? 'Failed to load' : '—';
+    el.appendChild(p);
+    return true;
+  }
+  function frame(el, h, label) {
+    el.replaceChildren();
+    const w = Math.max(260, Math.floor(el.clientWidth || 600));
+    const svg = d3.select(el).append('svg').attr('class', 'rr-svg').attr('viewBox', `0 0 ${w} ${h}`)
+      .attr('width', '100%').attr('height', h).attr('role', 'img').attr('aria-label', label);
+    return { svg, w, h };
+  }
+  function textW(svg, strings) {
+    const g = svg.append('g').attr('class', 'rr-axis');
+    let m = 0;
+    strings.forEach((s) => { const t = g.append('text').text(s); m = Math.max(m, t.node().getComputedTextLength()); });
+    g.remove();
+    return m;
+  }
+  function tip(el) {
+    const t = document.createElement('div');
+    t.className = 'rr-tip';
+    t.hidden = true;
+    el.appendChild(t);
+    return {
+      show(ev, title, lines) {
+        t.replaceChildren();
+        const h = document.createElement('div'); h.className = 'rr-tip-h'; h.textContent = title; t.appendChild(h);
+        lines.forEach(([k, v]) => {
+          const r = document.createElement('div'); r.className = 'rr-tip-r';
+          const a = document.createElement('span'); a.textContent = k;
+          const b = document.createElement('b'); b.textContent = v;
+          r.append(a, b); t.appendChild(r);
+        });
+        t.hidden = false;
+        const box = el.getBoundingClientRect();
+        let x = ev.clientX - box.left + 14, y = ev.clientY - box.top + 14;
+        if (x + t.offsetWidth > box.width) x = Math.max(4, ev.clientX - box.left - t.offsetWidth - 14);
+        if (y + t.offsetHeight > box.height) y = Math.max(4, ev.clientY - box.top - t.offsetHeight - 14);
+        t.style.left = x + 'px'; t.style.top = y + 'px';
+      },
+      hide() { t.hidden = true; },
+    };
+  }
+  function yAxis(svg, y, m, w, yFmt, ticks) {
+    const g = svg.append('g').attr('class', 'rr-axis').attr('transform', `translate(${m.l},0)`)
+      .call(d3.axisLeft(y).ticks(ticks || 5).tickSize(-(w - m.l - m.r)).tickFormat(yFmt || null));
+    g.select('.domain').remove();
+    g.selectAll('.tick line').attr('class', 'rr-gridline');
+    return g;
+  }
+  function phaseBands(svg, x, m, h) {
+    [[1, 6.5, 'Powerplay', true], [6.5, 15.5, 'Middle', false], [15.5, 20, 'Death', true]].forEach(([a, b, lab, fill]) => {
+      if (fill) svg.append('rect').attr('x', x(a)).attr('width', x(b) - x(a)).attr('y', m.t).attr('height', h - m.t - m.b).attr('fill', 'var(--rr-band)');
+      svg.append('text').attr('class', 'rr-bandlab').attr('x', (x(a) + x(b)) / 2).attr('y', m.t + 12).attr('text-anchor', 'middle').text(lab);
+    });
+  }
+  /* Line chart over overs 1-20. series: [{color, values: [{x, y}]}] */
+  function overLines(el, { series, yFmt, label, tipRows, h = 270 }) {
+    const pts = series.flatMap((s) => s.values.filter((v) => v.y != null));
+    if (!pts.length) { el.replaceChildren(); return; }
+    const { svg, w } = frame(el, h, label);
+    const y = d3.scaleLinear().domain(d3.extent(pts, (v) => v.y)).nice();
+    const m = { t: 22, r: 14, b: 26, l: textW(svg, y.ticks(5).map(yFmt || String)) + 12 };
+    y.range([h - m.b, m.t]);
+    const x = d3.scaleLinear().domain([1, 20]).range([m.l, w - m.r]);
+    phaseBands(svg, x, m, h);
+    yAxis(svg, y, m, w, yFmt);
+    svg.append('g').attr('class', 'rr-axis').attr('transform', `translate(0,${h - m.b})`)
+      .call(d3.axisBottom(x).tickValues(w < 460 ? [1, 6, 10, 15, 20] : d3.range(1, 21)).tickFormat(d3.format('d')));
+    const line = d3.line().defined((v) => v.y != null).x((v) => x(v.x)).y((v) => y(v.y));
+    series.forEach((s) => {
+      svg.append('path').attr('class', 'rr-line').attr('d', line(s.values)).attr('fill', 'none').attr('stroke', s.color).attr('stroke-width', 2.5).attr('stroke-linejoin', 'round');
+      svg.append('g').selectAll('circle').data(s.values.filter((v) => v.y != null)).join('circle')
+        .attr('cx', (v) => x(v.x)).attr('cy', (v) => y(v.y)).attr('r', 3).attr('fill', s.color);
+    });
+    const t = tip(el);
+    const guide = svg.append('line').attr('y1', m.t).attr('y2', h - m.b).attr('stroke', 'var(--cds-chart-reference)').attr('opacity', 0);
+    svg.append('rect').attr('x', m.l).attr('y', m.t).attr('width', w - m.l - m.r).attr('height', h - m.t - m.b).attr('fill', 'transparent')
+      .on('pointermove', (ev) => {
+        const ov = Math.max(1, Math.min(20, Math.round(x.invert(d3.pointer(ev)[0]))));
+        guide.attr('x1', x(ov)).attr('x2', x(ov)).attr('opacity', 1);
+        t.show(ev, 'Over ' + ov, tipRows(ov));
+      })
+      .on('pointerleave', () => { guide.attr('opacity', 0); t.hide(); });
+  }
+  /* Vertical bars: grouped or stacked. series: [{color, get(cat)}] */
+  function vbars(el, { cats, series, stacked, yFmt, label, tipRows, catFmt, h = 260, bands }) {
+    const { svg, w } = frame(el, h, label);
+    const tot = (c) => stacked ? d3.sum(series, (s) => s.get(c) || 0) : d3.max(series, (s) => s.get(c) || 0);
+    const y = d3.scaleLinear().domain([0, d3.max(cats, tot) || 1]).nice();
+    const m = { t: bands ? 22 : 10, r: 10, b: 26, l: textW(svg, y.ticks(5).map(yFmt || String)) + 12 };
+    y.range([h - m.b, m.t]);
+    const x = d3.scaleBand().domain(cats).range([m.l, w - m.r]).padding(0.22);
+    if (bands) {
+      const xl = d3.scaleLinear().domain([0.5, 20.5]).range([m.l, w - m.r]);
+      phaseBands(svg, (v) => xl(v === 1 ? 0.5 : v === 20 ? 20.5 : v), m, h);
+    }
+    yAxis(svg, y, m, w, yFmt);
+    const ticks = cats.filter((c, i) => w >= 460 || cats.length <= 8 || i % 4 === 0 || i === cats.length - 1);
+    svg.append('g').attr('class', 'rr-axis').attr('transform', `translate(0,${h - m.b})`)
+      .call(d3.axisBottom(x).tickValues(ticks).tickFormat(String).tickSizeOuter(0));
+    const t = tip(el);
+    const inner = d3.scaleBand().domain(d3.range(series.length)).range([0, x.bandwidth()]).padding(0.08);
+    cats.forEach((c) => {
+      let acc = 0;
+      series.forEach((s, i) => {
+        const v = s.get(c) || 0;
+        const y0 = stacked ? acc : 0;
+        acc += v;
+        svg.append('rect')
+          .attr('x', stacked ? x(c) : x(c) + inner(i)).attr('width', stacked ? x.bandwidth() : inner.bandwidth())
+          .attr('y', y(y0 + v)).attr('height', Math.max(0, y(y0) - y(y0 + v))).attr('fill', s.color).attr('rx', 2)
+          .on('pointermove', (ev) => t.show(ev, catFmt ? catFmt(c) : String(c), tipRows(c)))
+          .on('pointerleave', () => t.hide());
+      });
+    });
+  }
+  /* Horizontal bars with value labels. items: [{label, value, color}] */
+  function hbars(el, { items, vfmt, label, color, tipRows }) {
+    if (!items.length) { el.replaceChildren(); return; }
+    const rowH = 30, h = items.length * rowH + 12;
+    const { svg, w } = frame(el, h, label);
+    const m = { t: 6, b: 6, r: 64, l: Math.min(w * 0.42, textW(svg, items.map((d) => d.label)) + 14) };
+    const x = d3.scaleLinear().domain([0, d3.max(items, (d) => d.value) || 1]).range([m.l, w - m.r]);
+    const y = d3.scaleBand().domain(items.map((d) => d.label)).range([m.t, h - m.b]).padding(0.26);
+    const t = tip(el);
+    const g = svg.append('g').selectAll('g').data(items).join('g');
+    g.append('text').attr('class', 'rr-axis-text').attr('x', m.l - 8).attr('y', (d) => y(d.label) + y.bandwidth() / 2).attr('dy', '0.35em').attr('text-anchor', 'end').text((d) => d.label);
+    g.append('rect').attr('x', m.l).attr('y', (d) => y(d.label)).attr('height', y.bandwidth()).attr('rx', 3)
+      .attr('width', (d) => Math.max(1, x(d.value) - m.l)).attr('fill', (d) => d.color || color)
+      .on('pointermove', (ev, d) => t.show(ev, d.label, tipRows(d))).on('pointerleave', () => t.hide());
+    g.append('text').attr('class', 'rr-val').attr('x', (d) => x(d.value) + 6).attr('y', (d) => y(d.label) + y.bandwidth() / 2).attr('dy', '0.35em').text((d) => vfmt(d.value));
+  }
+  /* Diverging bars around zero. good(v) decides pink (good) or blue. */
+  function divbars(el, { items, vfmt, label, good, tipRows, note }) {
+    if (!items.length) { el.replaceChildren(); return; }
+    const rowH = 30, h = items.length * rowH + 14;
+    const { svg, w } = frame(el, h, label);
+    const lw = Math.min(w * 0.4, textW(svg, items.map((d) => d.label)) + 14);
+    const m = { t: 6, b: 8, l: lw, r: 12 };
+    const ext = d3.max(items, (d) => Math.abs(d.value)) || 1;
+    const room = 74;
+    const x = d3.scaleLinear().domain([-ext, ext]).range([m.l + room, w - m.r - room]);
+    const y = d3.scaleBand().domain(items.map((d) => d.label)).range([m.t, h - m.b]).padding(0.26);
+    svg.append('line').attr('class', 'rr-zero').attr('x1', x(0)).attr('x2', x(0)).attr('y1', m.t).attr('y2', h - m.b);
+    const t = tip(el);
+    const g = svg.append('g').selectAll('g').data(items).join('g');
+    g.append('text').attr('class', 'rr-axis-text').attr('x', m.l - 8).attr('y', (d) => y(d.label) + y.bandwidth() / 2).attr('dy', '0.35em').attr('text-anchor', 'end').text((d) => d.label);
+    g.append('rect').attr('x', (d) => Math.min(x(0), x(d.value))).attr('width', (d) => Math.max(1, Math.abs(x(d.value) - x(0))))
+      .attr('y', (d) => y(d.label)).attr('height', y.bandwidth()).attr('rx', 3).attr('fill', (d) => good(d.value) ? C.pink : C.blue)
+      .on('pointermove', (ev, d) => t.show(ev, d.label, tipRows(d))).on('pointerleave', () => t.hide());
+    g.append('text').attr('class', 'rr-val').attr('y', (d) => y(d.label) + y.bandwidth() / 2).attr('dy', '0.35em')
+      .attr('x', (d) => d.value >= 0 ? x(d.value) + 6 : x(d.value) - 6).attr('text-anchor', (d) => d.value >= 0 ? 'start' : 'end')
+      .text((d) => { const n = note ? note(d) : ''; return n ? vfmt(d.value) + '  ·  ' + n : vfmt(d.value); });
+  }
+  /* Heatmap. cell(r, c) -> {v, text, tip} or null */
+  function heat(el, { rows, cols, cell, label, lo = '#FCE4F1', hi = '#B8106A', rowLabel, h }) {
+    const cellH = 34;
+    const H = h || rows.length * cellH + 34;
+    const { svg, w } = frame(el, H, label);
+    const lw = Math.min(w * 0.45, textW(svg, rows.map(rowLabel || String)) + 14);
+    const m = { t: 26, l: lw, r: 4, b: 4 };
+    const x = d3.scaleBand().domain(cols).range([m.l, w - m.r]).padding(0.06);
+    const y = d3.scaleBand().domain(rows).range([m.t, H - m.b]).padding(0.08);
+    const vals = [];
+    rows.forEach((r) => cols.forEach((c) => { const k = cell(r, c); if (k && k.v != null) vals.push(k.v); }));
+    const s = d3.scaleLinear().domain(d3.extent(vals)).range([0, 1]).clamp(true);
+    const col = d3.interpolateRgb(lo, hi);
+    const t = tip(el);
+    svg.append('g').selectAll('text').data(cols).join('text').attr('class', 'rr-axis-text').attr('x', (c) => x(c) + x.bandwidth() / 2).attr('y', 16).attr('text-anchor', 'middle').text((c) => c);
+    svg.append('g').selectAll('text').data(rows).join('text').attr('class', 'rr-axis-text').attr('x', m.l - 8).attr('y', (r) => y(r) + y.bandwidth() / 2).attr('dy', '0.35em').attr('text-anchor', 'end').text((r) => rowLabel ? rowLabel(r) : r);
+    rows.forEach((r) => cols.forEach((c) => {
+      const k = cell(r, c);
+      if (!k || k.v == null) return;
+      const f = s(k.v);
+      svg.append('rect').attr('x', x(c)).attr('y', y(r)).attr('width', x.bandwidth()).attr('height', y.bandwidth()).attr('rx', 4).attr('fill', col(f))
+        .on('pointermove', (ev) => t.show(ev, (rowLabel ? rowLabel(r) : r) + ' · ' + c, k.tip)).on('pointerleave', () => t.hide());
+      svg.append('text').attr('x', x(c) + x.bandwidth() / 2).attr('y', y(r) + y.bandwidth() / 2).attr('dy', '0.35em').attr('text-anchor', 'middle')
+        .attr('pointer-events', 'none').style('fill', f > 0.55 ? '#FFFFFF' : '#0A1C3F').style('font-size', '12px').style('font-weight', '600').text(k.text);
+    }));
+  }
+  /* Scatter. pts: [{x, y, r, color, label, hi, id}] */
+  function scatter(el, { pts, xFmt, yFmt, xLabel, yLabel, label, h = 360, tipRows, onClick, labelTop = 0, zeroY }) {
+    if (!pts.length) { el.replaceChildren(); return; }
+    const { svg, w } = frame(el, h, label);
+    const xd = d3.extent(pts, (p) => p.x), yd = d3.extent(pts, (p) => p.y);
+    if (zeroY) { yd[0] = Math.min(yd[0], 0); yd[1] = Math.max(yd[1], 0); }
+    const y = d3.scaleLinear().domain(yd).nice();
+    const m = { t: 14, r: 18, b: 44, l: textW(svg, y.ticks(5).map(yFmt)) + 30 };
+    y.range([h - m.b, m.t]);
+    const x = d3.scaleLinear().domain(xd).nice().range([m.l, w - m.r]);
+    yAxis(svg, y, m, w, yFmt);
+    svg.append('g').attr('class', 'rr-axis').attr('transform', `translate(0,${h - m.b})`).call(d3.axisBottom(x).ticks(w < 460 ? 4 : 7).tickFormat(xFmt));
+    svg.append('text').attr('class', 'rr-axlabel').attr('x', (m.l + w - m.r) / 2).attr('y', h - 8).attr('text-anchor', 'middle').text(xLabel);
+    svg.append('text').attr('class', 'rr-axlabel').attr('transform', `translate(12,${(m.t + h - m.b) / 2}) rotate(-90)`).attr('text-anchor', 'middle').text(yLabel);
+    if (zeroY) svg.append('line').attr('class', 'rr-zero').attr('x1', m.l).attr('x2', w - m.r).attr('y1', y(0)).attr('y2', y(0));
+    const t = tip(el);
+    const order = pts.slice().sort((a, b) => (a.hi ? 1 : 0) - (b.hi ? 1 : 0));
+    svg.append('g').selectAll('circle').data(order).join('circle')
+      .attr('cx', (p) => x(p.x)).attr('cy', (p) => y(p.y)).attr('r', (p) => p.r).attr('fill', (p) => p.color)
+      .attr('fill-opacity', (p) => p.hi ? 1 : 0.6).attr('stroke', (p) => p.hi ? 'var(--color-fg)' : 'var(--color-panel)').attr('stroke-width', (p) => p.hi ? 2 : 1)
+      .style('cursor', onClick ? 'pointer' : 'default')
+      .on('pointermove', (ev, p) => t.show(ev, p.label, tipRows(p))).on('pointerleave', () => t.hide())
+      .on('click', (ev, p) => { if (onClick) onClick(p); });
+    const lab = pts.filter((p) => p.hi).concat(pts.filter((p) => !p.hi && p.top).slice(0, labelTop));
+    const placed = [];
+    lab.forEach((p) => {
+      let ly = y(p.y) - p.r - 5, dir = -1;
+      if (ly < m.t + 34) { ly = y(p.y) + p.r + 13; dir = 1; }
+      while (placed.some((q) => Math.abs(q.y - ly) < 13 && Math.abs(q.x - x(p.x)) < 90)) ly += dir * 13;
+      ly = Math.max(m.t + 10, Math.min(h - m.b - 4, ly));
+      placed.push({ x: x(p.x), y: ly });
+      const right = x(p.x) > w - 110;
+      svg.append('text').attr('class', 'rr-ptlab').attr('x', x(p.x)).attr('y', ly).attr('text-anchor', right ? 'end' : 'middle').text(p.label);
+    });
+  }
+  /* Table rows: replace tbody contents. cols: [{get(row) -> text|Node, num, cls}] */
+  function rows(tbody, data, key, cols, onClick, isSel) {
+    tbody.replaceChildren();
+    data.forEach((r, i) => {
+      const tr = document.createElement('tr');
+      tr.dataset.key = key(r);
+      if (onClick) { tr.className = 'rr-click'; tr.tabIndex = 0; tr.onclick = () => onClick(r); tr.onkeydown = (e) => { if (e.key === 'Enter') onClick(r); }; }
+      if (isSel && isSel(r)) tr.classList.add('rr-sel');
+      cols.forEach((c) => {
+        const td = document.createElement('td');
+        if (c.num) td.className = 'num';
+        if (c.cls) td.classList.add(c.cls);
+        const v = c.get(r, i);
+        if (v instanceof Node) td.appendChild(v); else td.textContent = v;
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+  }
+  function cellbar(text, frac, blue) {
+    const s = document.createElement('span');
+    s.className = 'rr-cellbar' + (blue ? ' blue' : '');
+    const i = document.createElement('i');
+    i.style.width = Math.max(2, Math.round(60 * Math.max(0, Math.min(1, frac)))) + 'px';
+    const b = document.createElement('span');
+    b.textContent = text;
+    s.append(i, b);
+    return s;
+  }
+  function signed(v, f, goodPositive) {
+    const s = document.createElement('span');
+    s.textContent = v == null ? '—' : F[f](v);
+    if (v != null && v !== 0) s.className = (goodPositive ? v > 0 : v < 0) ? 'rr-pos' : 'rr-neg';
+    return s;
+  }
+  return { C, F, fmt, P, comp, enc, match, wait, frame, textW, tip, overLines, vbars, hbars, divbars, heat, scatter, rows, cellbar, signed };
+})();
+</script>
+
+<script>
+/* Tabs and the competition filter: listeners and attribute state only. */
+(function () {
+  const tabs = Array.from(document.querySelectorAll('.rr-tab[data-tab]'));
+  const sections = Array.from(document.querySelectorAll('.rr-section[data-section]'));
+  const compBox = document.querySelectorAll('#comp-filter');
+  function open(name, link) {
+    if (!sections.some((s) => s.id === name)) name = 'ratings';
+    sections.forEach((s) => { s.hidden = s.id !== name; });
+    tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.tab === name)));
+    compBox.forEach((c) => { c.hidden = name === 'players' || name === 'ratings'; });
+    if (link) dash.setLink(name);
+  }
+  tabs.forEach((t) => t.addEventListener('click', () => open(t.dataset.tab, true)));
+  open((location.hash || '').replace('#', '') || 'ratings', false);
+
+  document.querySelectorAll('.rr-seg button[data-comp]').forEach((b) => {
+    b.addEventListener('click', () => dash.setParams({ comp: b.dataset.comp }));
+  });
+  const sel = (id, param, asNumber) => {
+    document.querySelectorAll('#' + id).forEach((el) => {
+      el.addEventListener('change', () => dash.setParams({ [param]: asNumber ? Number(el.value) : el.value }));
+    });
+  };
+  sel('rr-dphase', 'dphase');
+  sel('rr-bsit', 'bsit');
+  sel('rr-wsit', 'wsit');
+  sel('rr-minballs', 'minballs', true);
+  sel('rr-rkind', 'rkind');
+  sel('rr-rrole', 'rrole');
+  dash.onData(() => {
+    const p = dash.params();
+    document.querySelectorAll('.rr-seg button[data-comp]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.comp === (p.comp || 'All'))));
+    const set = (id, v) => document.querySelectorAll('#' + id).forEach((el) => { if (document.activeElement !== el && v != null) el.value = String(v); });
+    set('rr-dphase', p.dphase || 'Death');
+    set('rr-bsit', p.bsit || 'death');
+    set('rr-wsit', p.wsit || 'death');
+    set('rr-minballs', p.minballs || 120);
+    set('rr-rkind', p.rkind || 'batters');
+  });
+})();
+</script>
+
+<script>
+/* Numbers: one value from one row. data-where is fixed, or follows the competition filter / chosen player. */
+function drawValue(el) {
+  const d = dash.data(el.dataset.source);
+  if (d.status === 'loading') { el.textContent = '—'; return; }
+  el.classList.remove('dash-skeleton');
+  if (d.status !== 'ok') { el.textContent = '—'; return; }
+  const p = dash.params();
+  const scope = el.dataset.scope;
+  if (scope === 'comp') el.dataset.where = 'comp=' + RR.enc(p.comp || 'All');
+  if (scope === 'batter') el.dataset.where = 'player_id=' + RR.enc(p.batter || '2258') + '&situation=all';
+  if (scope === 'bowler') el.dataset.where = 'player_id=' + RR.enc(p.bowler || '1612') + '&situation=all';
+  const row = d.data.find((r) => RR.match(r, el.dataset.where || ''));
+  el.textContent = row ? RR.fmt(row[el.dataset.field], el.dataset.fmt) : '—';
+}
+dash.draw('kpi', drawValue);
+dash.draw('pkpi', drawValue);
+</script>
+
+<script>
+/* ---------------- Overview ---------------- */
+dash.draw('years', (el) => {
+  const d = dash.data('by_year');
+  if (RR.wait(el, d)) return;
+  const years = Array.from(new Set(d.data.map((r) => r.year))).sort();
+  const get = (comp) => (y) => (d.data.find((r) => r.year === y && r.comp === comp) || {}).matches || 0;
+  RR.vbars(el, {
+    cats: years, stacked: true, label: 'Matches with ball data by year, stacked by competition',
+    series: [{ color: RR.C.pink, get: get('IPL') }, { color: RR.C.blue, get: get('T20I') }, { color: RR.C.gold, get: get('A-Team') }],
+    yFmt: d3.format('d'),
+    tipRows: (y) => [['IPL', RR.fmt(get('IPL')(y))], ['T20I', RR.fmt(get('T20I')(y))], ['A-Team', RR.fmt(get('A-Team')(y))]],
+  });
+});
+
+dash.draw('speedyear', (el) => {
+  const d = dash.data('by_year');
+  if (RR.wait(el, d)) return;
+  const years = Array.from(new Set(d.data.map((r) => r.year))).sort();
+  const row = (comp, y) => d.data.find((r) => r.year === y && r.comp === comp) || {};
+  RR.vbars(el, {
+    cats: years, label: 'Share of deliveries with a usable bowling speed, by year, IPL and T20I',
+    series: [{ color: RR.C.pink, get: (y) => row('IPL', y).speed_captured_pct }, { color: RR.C.blue, get: (y) => row('T20I', y).speed_captured_pct }],
+    yFmt: (v) => v + '%',
+    tipRows: (y) => [['IPL captured', RR.fmt(row('IPL', y).speed_captured_pct, 'pct')], ['T20I captured', RR.fmt(row('T20I', y).speed_captured_pct, 'pct')],
+      ['IPL not captured', RR.fmt(row('IPL', y).speed_not_captured)], ['T20I not captured', RR.fmt(row('T20I', y).speed_not_captured)]],
+  });
+});
+
+dash.draw('extras', (el) => {
+  const d = dash.data('extras');
+  if (RR.wait(el, d)) return;
+  const items = d.data.filter((r) => r.comp === RR.comp()).sort((a, b) => b.deliveries - a.deliveries)
+    .map((r) => ({ label: r.extra, value: r.deliveries, row: r }));
+  RR.hbars(el, { items, color: RR.C.pink, vfmt: RR.F.int, label: 'Extras by type, deliveries',
+    tipRows: (it) => [['Deliveries', RR.fmt(it.row.deliveries)], ['Runs (est.)', RR.fmt(it.row.runs_est)]] });
+});
+
+dash.draw('dismissals', (el) => {
+  const d = dash.data('dismissals');
+  if (RR.wait(el, d)) return;
+  const rows = d.data.filter((r) => r.comp === RR.comp());
+  const total = d3.sum(rows, (r) => r.wickets);
+  const items = rows.sort((a, b) => b.wickets - a.wickets).map((r) => ({ label: r.dismissal, value: r.wickets, row: r }));
+  RR.hbars(el, { items, color: RR.C.blue, vfmt: RR.F.int, label: 'Wickets by dismissal type',
+    tipRows: (it) => [['Wickets', RR.fmt(it.row.wickets)], ['Share', RR.fmt(100 * it.row.wickets / total, 'pct')]] });
+});
+
+dash.draw('quality', (tbody) => {
+  const d = dash.data('quality');
+  if (d.status !== 'ok') { tbody.replaceChildren(); return; }
+  RR.rows(tbody, d.data, (r) => r.id, [
+    { get: (r) => r.id, cls: 'rr-id' },
+    { get: (r) => r.column, cls: 'rr-col' },
+    { get: (r) => r.finding },
+    { get: (r) => RR.fmt(r.count), num: true },
+    { get: (r) => r.impact },
+    { get: (r) => r.treatment },
+  ]);
+});
+
+/* ---------------- Innings progression ---------------- */
+function overRows() {
+  const d = dash.data('by_over');
+  return d;
+}
+function overSeries(d, field, inningsLabel) {
+  return d3.range(1, 21).map((ov) => {
+    const r = d.data.find((x) => x.comp === RR.comp() && x.innings === inningsLabel && x.over === ov);
+    return { x: ov, y: r ? r[field] : null, row: r };
+  });
+}
+const INN1 = '1st innings', INN2 = '2nd innings (chase)';
+function overTip(d, fields) {
+  return (ov) => {
+    const out = [];
+    [[INN1, '1st'], [INN2, '2nd']].forEach(([inn, short]) => {
+      const r = d.data.find((x) => x.comp === RR.comp() && x.innings === inn && x.over === ov);
+      if (!r) return;
+      fields.forEach(([k, f, lab]) => out.push([short + ' · ' + lab, RR.fmt(r[k], f)]));
+    });
+    return out;
+  };
+}
+dash.draw('rrover', (el) => {
+  const d = overRows();
+  if (RR.wait(el, d)) return;
+  RR.overLines(el, {
+    label: 'Run rate by over for the first and second innings',
+    series: [{ color: RR.C.pink, values: overSeries(d, 'run_rate', INN1) }, { color: RR.C.blue, values: overSeries(d, 'run_rate', INN2) }],
+    yFmt: d3.format('.0f'),
+    tipRows: overTip(d, [['run_rate', 'dec2', 'run rate'], ['innings_count', 'int', 'innings']]),
+  });
+});
+dash.draw('scoreover', (el) => {
+  const d = overRows();
+  if (RR.wait(el, d)) return;
+  RR.overLines(el, {
+    label: 'Average score at the end of each over, first and second innings',
+    series: [{ color: RR.C.pink, values: overSeries(d, 'avg_score_end', INN1) }, { color: RR.C.blue, values: overSeries(d, 'avg_score_end', INN2) }],
+    yFmt: d3.format('.0f'),
+    tipRows: overTip(d, [['avg_score_end', 'dec1', 'score'], ['avg_wickets_end', 'dec2', 'wickets down']]),
+  });
+});
+dash.draw('wktsover', (el) => {
+  const d = overRows();
+  if (RR.wait(el, d)) return;
+  const get = (inn) => (ov) => { const r = d.data.find((x) => x.comp === RR.comp() && x.innings === inn && x.over === ov); return r ? r.wickets_per_innings : 0; };
+  RR.vbars(el, {
+    cats: d3.range(1, 21), bands: true, label: 'Wickets per innings in each over, first and second innings',
+    series: [{ color: RR.C.pink, get: get(INN1) }, { color: RR.C.blue, get: get(INN2) }],
+    yFmt: d3.format('.2f'), catFmt: (c) => 'Over ' + c,
+    tipRows: overTip(d, [['wickets_per_innings', 'dec2', 'wickets / innings'], ['boundary_pct', 'pct', 'boundary %']]),
+  });
+});
+dash.draw('speedover', (el) => {
+  const d = overRows();
+  if (RR.wait(el, d)) return;
+  RR.overLines(el, {
+    label: 'Average bowling speed by over for pace and spin, first innings',
+    series: [{ color: RR.C.blue, values: overSeries(d, 'speed_pace', INN1) }, { color: RR.C.pink, values: overSeries(d, 'speed_spin', INN1) }],
+    yFmt: d3.format('.0f'),
+    tipRows: (ov) => { const r = d.data.find((x) => x.comp === RR.comp() && x.innings === INN1 && x.over === ov) || {}; return [['Pace', RR.fmt(r.speed_pace, 'dec1') + ' km/h'], ['Spin', RR.fmt(r.speed_spin, 'dec1') + ' km/h']]; },
+  });
+});
+dash.draw('outcomes', (el) => {
+  const d = dash.data('outcomes');
+  if (RR.wait(el, d)) return;
+  const phases = ['Powerplay', 'Middle', 'Death'];
+  const kinds = [['Dot', RR.C.steel], ['Single', RR.C.sky], ['2s / 3s', RR.C.navy], ['Four', RR.C.blue], ['Six', RR.C.pink], ['Wicket', RR.C.gold], ['Wide / no-ball', RR.C.rose], ['Bye / leg-bye', '#D9DEE8']];
+  const h = 3 * 46 + 14;
+  const { svg, w } = RR.frame(el, h, 'Share of deliveries by outcome in each phase');
+  const lw = RR.textW(svg, phases) + 14;
+  const x = d3.scaleLinear().domain([0, 100]).range([lw, w - 6]);
+  const y = d3.scaleBand().domain(phases).range([6, h - 8]).padding(0.25);
+  const t = RR.tip(el);
+  phases.forEach((ph) => {
+    let acc = 0;
+    svg.append('text').attr('class', 'rr-axis-text').attr('x', lw - 8).attr('y', y(ph) + y.bandwidth() / 2).attr('dy', '0.35em').attr('text-anchor', 'end').text(ph);
+    kinds.forEach(([k, color]) => {
+      const r = d.data.find((z) => z.comp === RR.comp() && z.phase === ph && z.outcome === k);
+      if (!r) return;
+      const x0 = acc; acc += r.share_pct;
+      svg.append('rect').attr('x', x(x0)).attr('width', Math.max(0, x(acc) - x(x0) - 1)).attr('y', y(ph)).attr('height', y.bandwidth()).attr('fill', color)
+        .on('pointermove', (ev) => t.show(ev, ph + ' · ' + k, [['Share of balls', RR.fmt(r.share_pct, 'pct')], ['Deliveries', RR.fmt(r.deliveries)]])).on('pointerleave', () => t.hide());
+      if (x(acc) - x(x0) > 34) svg.append('text').attr('x', (x(x0) + x(acc)) / 2).attr('y', y(ph) + y.bandwidth() / 2).attr('dy', '0.35em').attr('text-anchor', 'middle')
+        .attr('pointer-events', 'none').style('fill', ['Dot', 'Wide / no-ball', 'Bye / leg-bye', 'Single'].includes(k) ? '#0A1C3F' : '#FFFFFF').style('font-size', '11px').style('font-weight', '600').text(Math.round(r.share_pct) + '%');
+    });
+  });
+});
+dash.draw('wkheat', (el) => {
+  const d = dash.data('wk_phase');
+  if (RR.wait(el, d)) return;
+  const rows = ['0', '1', '2', '3', '4', '5', '6', '7', '8+'];
+  RR.heat(el, {
+    rows, cols: ['Powerplay', 'Middle', 'Death'], label: 'Run rate by wickets already down and phase',
+    rowLabel: (r) => r + (r === '1' ? ' wicket down' : ' wickets down'),
+    cell: (r, c) => {
+      const z = d.data.find((q) => q.comp === RR.comp() && q.wickets_down === r && q.phase === c);
+      return z ? { v: z.run_rate, text: RR.fmt(z.run_rate, 'dec2'), tip: [['Run rate', RR.fmt(z.run_rate, 'dec2')], ['Wicket % per ball', RR.fmt(z.wicket_pct, 'pct')], ['Legal balls', RR.fmt(z.legal_balls)]] } : null;
+    },
+  });
+});
+dash.draw('chase', (tbody) => {
+  const d = dash.data('chase');
+  if (d.status !== 'ok') { tbody.replaceChildren(); return; }
+  const rows = d.data.filter((r) => r.comp === RR.comp()).sort((a, b) => a.band_order - b.band_order);
+  RR.rows(tbody, rows, (r) => RR.enc(r.comp) + ',' + r.band_order, [
+    { get: (r) => r.required_rate },
+    { get: (r) => RR.fmt(r.chases), num: true },
+    { get: (r) => RR.fmt(r.legal_balls), num: true },
+    { get: (r) => RR.fmt(r.run_rate, 'dec2'), num: true },
+    { get: (r) => RR.fmt(r.wicket_pct, 'pct'), num: true },
+    { get: (r) => RR.fmt(r.boundary_pct, 'pct'), num: true },
+    { get: (r) => RR.cellbar(RR.fmt(r.win_pct, 'pct'), r.win_pct / 100), num: true },
+  ]);
+});
+
+/* ---------------- Matchups ---------------- */
+dash.draw('matchheat', (el) => {
+  const d = dash.data('matchup');
+  if (RR.wait(el, d)) return;
+  const rows = d.data.filter((r) => r.comp === RR.comp());
+  const types = Array.from(d3.rollup(rows, (v) => d3.sum(v, (r) => r.balls), (r) => r.bowling_type)).sort((a, b) => b[1] - a[1]).map((x) => x[0]);
+  RR.heat(el, {
+    rows: types, cols: ['RHB', 'LHB'], label: 'Strike rate by bowling type and batting hand',
+    cell: (bt, hand) => {
+      const z = rows.find((q) => q.bowling_type === bt && q.batting_hand === hand);
+      return z ? { v: z.strike_rate, text: RR.fmt(z.strike_rate, 'dec1'), tip: [['Strike rate', RR.fmt(z.strike_rate, 'dec1')], ['Dismissals per ball', RR.fmt(z.dismissal_pct, 'pct2')], ['Balls faced', RR.fmt(z.balls)]] } : null;
+    },
+  });
+});
+dash.draw('strokes', (el) => {
+  const d = dash.data('strokes');
+  if (RR.wait(el, d)) return;
+  const rows = d.data.filter((r) => r.comp === RR.comp());
+  const top = rows.slice().sort((a, b) => b.balls - a.balls).slice(0, 7).map((r) => r.stroke + r.pace_or_spin);
+  const maxB = d3.max(rows, (r) => r.balls) || 1;
+  const pts = rows.map((r) => ({
+    x: r.dismissal_pct, y: r.strike_rate, r: 3 + 13 * Math.sqrt(r.balls / maxB),
+    color: r.pace_or_spin === 'Pace' ? RR.C.blue : RR.C.pink, label: r.stroke, row: r, top: top.includes(r.stroke + r.pace_or_spin),
+  })).sort((a, b) => b.r - a.r);
+  RR.scatter(el, {
+    pts, label: 'Strike rate against dismissals per ball for each stroke, split by pace and spin',
+    xFmt: (v) => v + '%', yFmt: d3.format('d'), xLabel: 'Dismissals per ball faced', yLabel: 'Strike rate', labelTop: 7,
+    tipRows: (p) => [['Against', p.row.pace_or_spin], ['Strike rate', RR.fmt(p.row.strike_rate, 'dec1')], ['Dismissals per ball', RR.fmt(p.row.dismissal_pct, 'pct2')], ['Balls faced', RR.fmt(p.row.balls)]],
+  });
+});
+dash.draw('delivery', (tbody) => {
+  const d = dash.data('delivery');
+  if (d.status !== 'ok') { tbody.replaceChildren(); return; }
+  const ph = dash.params().dphase || 'Death';
+  const rows = d.data.filter((r) => r.comp === RR.comp() && r.phase === ph).sort((a, b) => a.economy - b.economy);
+  const maxE = d3.max(rows, (r) => r.economy) || 1;
+  RR.rows(tbody, rows, (r) => [r.comp, r.delivery_style, r.phase].map(RR.enc).join(','), [
+    { get: (r) => r.delivery_style },
+    { get: (r) => RR.fmt(r.legal_balls), num: true },
+    { get: (r) => RR.cellbar(RR.fmt(r.economy, 'dec2'), r.economy / maxE, true), num: true },
+    { get: (r) => RR.fmt(r.dot_pct, 'pct'), num: true },
+    { get: (r) => RR.fmt(r.wicket_pct, 'pct2'), num: true },
+  ]);
+});
+
+/* ---------------- Players ---------------- */
+const SIT_ORDER = ['all', 'pp', 'mid', 'death', 'chase', 'tough', 'behind', 'collapse', 'knockout', 'pressure'];
+function playerSelect(sel, id, param, fallback, ballsField) {
+  const d = dash.data(id);
+  if (d.status !== 'ok') { sel.replaceChildren(); return; }
+  const rows = d.data.filter((r) => r.situation === 'all').sort((a, b) => b[ballsField] - a[ballsField]);
+  sel.replaceChildren(...rows.map((r) => new Option(r.player + (r.team ? ' · ' + r.team : '') + ' (' + RR.fmt(r[ballsField]) + ' balls)', r.player_id)));
+  sel.value = String(dash.params()[param] || fallback);
+  sel.onchange = () => dash.setParams({ [param]: sel.value });
+}
+dash.draw('batsel', (sel) => playerSelect(sel, 'batters', 'batter', '2258', 'balls'));
+dash.draw('bowlsel', (sel) => playerSelect(sel, 'bowlers', 'bowler', '1612', 'legal_balls'));
+function playerAll(id, param, fallback) {
+  const d = dash.data(id);
+  if (d.status !== 'ok') return null;
+  const pid = String(dash.params()[param] || fallback);
+  return d.data.find((r) => r.player_id === pid && r.situation === 'all') || null;
+}
+dash.draw('batname', (el) => { const r = playerAll('batters', 'batter', '2258'); el.textContent = r ? r.player : '—'; });
+dash.draw('batteam', (el) => { const r = playerAll('batters', 'batter', '2258'); el.textContent = r && r.team ? 'Latest team: ' + r.team : ''; });
+dash.draw('bowlname', (el) => { const r = playerAll('bowlers', 'bowler', '1612'); el.textContent = r ? r.player : '—'; });
+dash.draw('bowlteam', (el) => { const r = playerAll('bowlers', 'bowler', '1612'); el.textContent = r && r.team ? 'Latest team: ' + r.team : ''; });
+
+function playerRows(id, param, fallback) {
+  const d = dash.data(id);
+  const pid = String(dash.params()[param] || fallback);
+  return { d, pid, rows: d.status === 'ok' ? d.data.filter((r) => r.player_id === pid).sort((a, b) => SIT_ORDER.indexOf(a.situation) - SIT_ORDER.indexOf(b.situation)) : [] };
+}
+dash.draw('batdiv', (el) => {
+  const { d, rows } = playerRows('batters', 'batter', '2258');
+  if (RR.wait(el, d)) return;
+  const items = rows.filter((r) => r.situation !== 'all').map((r) => ({ label: r.situation_label, value: r.sr_vs_field, row: r }));
+  RR.divbars(el, {
+    items, label: 'Strike rate minus the field strike rate in each situation', vfmt: RR.F.s1, good: (v) => v >= 0,
+    note: (it) => RR.fmt(it.row.balls) + ' b',
+    tipRows: (it) => [['Strike rate', RR.fmt(it.row.strike_rate, 'dec1')], ['vs field', RR.F.s1(it.row.sr_vs_field)], ['Balls faced', RR.fmt(it.row.balls)], ['Dismissals per ball', RR.fmt(it.row.dismissal_pct, 'pct2')]],
+  });
+});
+dash.draw('battable', (tbody) => {
+  const { d, pid, rows } = playerRows('batters', 'batter', '2258');
+  if (d.status !== 'ok') { tbody.replaceChildren(); return; }
+  RR.rows(tbody, rows, (r) => RR.enc(pid) + ',' + RR.enc(r.situation), [
+    { get: (r) => r.situation_label },
+    { get: (r) => RR.fmt(r.balls), num: true },
+    { get: (r) => RR.fmt(r.strike_rate, 'dec1'), num: true },
+    { get: (r) => RR.signed(r.sr_vs_field, 's1', true), num: true },
+    { get: (r) => RR.fmt(r.dismissal_pct, 'pct2'), num: true },
+    { get: (r) => RR.fmt(r.boundary_pct, 'pct'), num: true },
+  ], null, (r) => r.situation === 'all');
+});
+dash.draw('bowldiv', (el) => {
+  const { d, rows } = playerRows('bowlers', 'bowler', '1612');
+  if (RR.wait(el, d)) return;
+  const items = rows.filter((r) => r.situation !== 'all').map((r) => ({ label: r.situation_label, value: r.econ_vs_field, row: r }));
+  RR.divbars(el, {
+    items, label: 'Economy minus the field economy in each situation', vfmt: RR.F.s2, good: (v) => v <= 0,
+    note: (it) => RR.fmt(it.row.legal_balls) + ' b',
+    tipRows: (it) => [['Economy', RR.fmt(it.row.economy, 'dec2')], ['vs field', RR.F.s2(it.row.econ_vs_field)], ['Legal balls', RR.fmt(it.row.legal_balls)], ['Wickets', RR.fmt(it.row.wickets)]],
+  });
+});
+dash.draw('bowltable', (tbody) => {
+  const { d, pid, rows } = playerRows('bowlers', 'bowler', '1612');
+  if (d.status !== 'ok') { tbody.replaceChildren(); return; }
+  RR.rows(tbody, rows, (r) => RR.enc(pid) + ',' + RR.enc(r.situation), [
+    { get: (r) => r.situation_label },
+    { get: (r) => RR.fmt(r.legal_balls), num: true },
+    { get: (r) => RR.fmt(r.economy, 'dec2'), num: true },
+    { get: (r) => RR.signed(r.econ_vs_field, 's2', false), num: true },
+    { get: (r) => RR.fmt(r.wicket_pct, 'pct2'), num: true },
+    { get: (r) => RR.fmt(r.dot_pct, 'pct'), num: true },
+  ], null, (r) => r.situation === 'all');
+});
+
+function peers(id, sitParam, ballsField) {
+  const d = dash.data(id);
+  if (d.status !== 'ok') return { d, list: [] };
+  const p = dash.params();
+  const sit = p[sitParam] || 'death';
+  const minB = Number(p.minballs || 120);
+  const base = new Map(d.data.filter((r) => r.situation === 'all').map((r) => [r.player_id, r]));
+  const list = d.data.filter((r) => r.situation === sit && r[ballsField] >= minB && base.has(r.player_id))
+    .map((r) => ({ sit: r, all: base.get(r.player_id) }));
+  return { d, list, sit };
+}
+dash.draw('batpeers', (el) => {
+  const { d, list } = peers('batters', 'bsit', 'balls');
+  if (RR.wait(el, d)) return;
+  const pid = String(dash.params().batter || '2258');
+  const ranked = list.slice().sort((a, b) => b.sit.sr_vs_field - a.sit.sr_vs_field);
+  const top = new Set(ranked.slice(0, 5).map((x) => x.sit.player_id));
+  const pts = list.map((x) => ({
+    x: x.all.strike_rate, y: x.sit.sr_vs_field, r: x.sit.player_id === pid ? 8 : 5,
+    color: x.sit.player_id === pid ? RR.C.pink : RR.C.blue, hi: x.sit.player_id === pid, top: top.has(x.sit.player_id), label: x.sit.player, x0: x,
+  }));
+  RR.scatter(el, {
+    pts, zeroY: true, labelTop: 5, label: 'Batters: usual strike rate against strike rate above the field in the chosen situation',
+    xFmt: d3.format('d'), yFmt: d3.format('+d'), xLabel: 'Usual strike rate (all balls)', yLabel: 'SR vs field in situation',
+    tipRows: (p) => [['Team', p.x0.all.team || '—'], ['Usual SR', RR.fmt(p.x0.all.strike_rate, 'dec1')], ['SR in situation', RR.fmt(p.x0.sit.strike_rate, 'dec1')], ['vs field', RR.F.s1(p.x0.sit.sr_vs_field)], ['Balls in situation', RR.fmt(p.x0.sit.balls)]],
+    onClick: (p) => dash.setParams({ batter: p.x0.sit.player_id }),
+  });
+});
+dash.draw('battop', (tbody) => {
+  const { d, list } = peers('batters', 'bsit', 'balls');
+  if (d.status !== 'ok') { tbody.replaceChildren(); return; }
+  const pid = String(dash.params().batter || '2258');
+  const rows = list.sort((a, b) => b.sit.sr_vs_field - a.sit.sr_vs_field).slice(0, 10).map((x) => x.sit);
+  RR.rows(tbody, rows, (r) => RR.enc(r.player_id) + ',' + RR.enc(r.situation), [
+    { get: (r, i) => String(i + 1), cls: 'rr-id' },
+    { get: (r) => r.player },
+    { get: (r) => r.team || '—' },
+    { get: (r) => RR.fmt(r.balls), num: true },
+    { get: (r) => RR.fmt(r.strike_rate, 'dec1'), num: true },
+    { get: (r) => RR.signed(r.sr_vs_field, 's1', true), num: true },
+  ], (r) => dash.setParams({ batter: r.player_id }), (r) => r.player_id === pid);
+});
+dash.draw('bowlpeers', (el) => {
+  const { d, list } = peers('bowlers', 'wsit', 'legal_balls');
+  if (RR.wait(el, d)) return;
+  const pid = String(dash.params().bowler || '1612');
+  const ranked = list.slice().sort((a, b) => a.sit.econ_vs_field - b.sit.econ_vs_field);
+  const top = new Set(ranked.slice(0, 5).map((x) => x.sit.player_id));
+  const pts = list.map((x) => ({
+    x: x.all.economy, y: x.sit.econ_vs_field, r: x.sit.player_id === pid ? 8 : 5,
+    color: x.sit.player_id === pid ? RR.C.pink : RR.C.blue, hi: x.sit.player_id === pid, top: top.has(x.sit.player_id), label: x.sit.player, x0: x,
+  }));
+  RR.scatter(el, {
+    pts, zeroY: true, labelTop: 5, label: 'Bowlers: usual economy against economy relative to the field in the chosen situation',
+    xFmt: d3.format('.1f'), yFmt: d3.format('+.1f'), xLabel: 'Usual economy (all balls)', yLabel: 'Economy vs field in situation',
+    tipRows: (p) => [['Team', p.x0.all.team || '—'], ['Usual economy', RR.fmt(p.x0.all.economy, 'dec2')], ['Economy in situation', RR.fmt(p.x0.sit.economy, 'dec2')], ['vs field', RR.F.s2(p.x0.sit.econ_vs_field)], ['Legal balls in situation', RR.fmt(p.x0.sit.legal_balls)]],
+    onClick: (p) => dash.setParams({ bowler: p.x0.sit.player_id }),
+  });
+});
+dash.draw('bowltop', (tbody) => {
+  const { d, list } = peers('bowlers', 'wsit', 'legal_balls');
+  if (d.status !== 'ok') { tbody.replaceChildren(); return; }
+  const pid = String(dash.params().bowler || '1612');
+  const rows = list.sort((a, b) => a.sit.econ_vs_field - b.sit.econ_vs_field).slice(0, 10).map((x) => x.sit);
+  RR.rows(tbody, rows, (r) => RR.enc(r.player_id) + ',' + RR.enc(r.situation), [
+    { get: (r, i) => String(i + 1), cls: 'rr-id' },
+    { get: (r) => r.player },
+    { get: (r) => r.team || '—' },
+    { get: (r) => RR.fmt(r.legal_balls), num: true },
+    { get: (r) => RR.fmt(r.economy, 'dec2'), num: true },
+    { get: (r) => RR.signed(r.econ_vs_field, 's2', false), num: true },
+  ], (r) => dash.setParams({ bowler: r.player_id }), (r) => r.player_id === pid);
+});
+</script>
+
+<script>
+/* ---------------- Pressure ratings (version 2) ---------------- */
+dash.draw('v2top', (tbody) => {
+  const d = dash.data('v2_' + tbody.dataset.kind);
+  if (d.status !== 'ok') { tbody.replaceChildren(); return; }
+  const rows = d.data.slice(0, 10);
+  const max = d3.max(rows, (r) => r.conservative) || 1;
+  RR.rows(tbody, rows, (r) => r.player_id, [
+    { get: (r) => r.rank },
+    { get: (r) => r.player },
+    { get: (r) => r.role },
+    { get: (r) => RR.cellbar(RR.F.s1(r.conservative), r.conservative / max), num: true },
+    { get: (r) => RR.F.s1(r.expected), num: true },
+    { get: (r) => RR.fmt(r.pressure_balls), num: true },
+  ]);
+});
+
+dash.draw('v2index', (el) => {
+  const d = dash.data('v2_index');
+  if (RR.wait(el, d)) return;
+  const items = d.data.map((r) => ({ label: r.definition, value: r.share, color: r.chosen ? RR.C.pink : RR.C.steel, row: r }));
+  RR.hbars(el, { items, vfmt: (v) => d3.format('.1f')(v) + '%', label: 'Share of real win-probability swing on the top 20% of balls, by pressure definition',
+    tipRows: (it) => [['Share of win swing', d3.format('.1f')(it.value) + '%']] });
+});
+
+dash.draw('v2dots', (el) => {
+  const d = dash.data('v2_dots');
+  if (RR.wait(el, d)) return;
+  const items = d.data.map((r) => ({ label: r.run, value: r.runs_vs_expected, row: r }));
+  RR.divbars(el, { items, vfmt: RR.F.s1, good: (v) => v >= 0, label: 'Runs per 100 balls against expectation by run of dot balls',
+    tipRows: (it) => [['Runs per 100 balls vs expected', RR.F.s1(it.value)]] });
+});
+
+dash.draw('v2tests', (el) => {
+  const d = dash.data('v2_tests');
+  if (RR.wait(el, d)) return;
+  const items = d.data.map((r) => ({
+    label: (r.list === 'batters' ? 'Bat: ' : 'Bowl: ') + r.skill, value: r.predicts, row: r,
+    color: r.status !== 'used' ? RR.C.steel : (r.predicts >= 0.13 ? RR.C.pink : RR.C.blue),
+  }));
+  RR.hbars(el, { items, vfmt: RR.F.s2, label: 'How well each 2022-24 skill predicts 2025-26 pressure value',
+    tipRows: (it) => [['Predicts 2025-26', RR.F.s2(it.row.predicts)], ['90% range', RR.F.s2(it.row.p5) + ' to ' + RR.F.s2(it.row.p95)],
+      ['Split-half repeatability', RR.F.s2(it.row.split_half)],
+      ['Beyond ordinary form', it.row.beyond_usual == null ? '—' : RR.F.s2(it.row.beyond_usual)], ['In the rating', it.row.status]] });
+});
+
+dash.draw('v2offsets', (el) => {
+  const d = dash.data('v2_offsets');
+  if (RR.wait(el, d)) return;
+  const items = d.data.map((r) => ({ label: r.league, value: r.batters, row: r }));
+  RR.divbars(el, { items, vfmt: RR.F.s1, good: (v) => v <= 0, label: 'League offsets against the IPL for batters; bowlers in the tooltip',
+    tipRows: (it) => [['Batters', RR.F.s1(it.row.batters)], ['Bowlers', RR.F.s1(it.row.bowlers)],
+      ['Linking batters', RR.fmt(it.row.links_batters)], ['Linking bowlers', RR.fmt(it.row.links_bowlers)]] });
+});
+
+function v2kind() { return dash.params().rkind || 'batters'; }
+function v2roleOf(r) { return String(r.role).split(' · ')[0]; }
+dash.draw('v2rolesel', (sel) => {
+  const d = dash.data('v2_' + v2kind());
+  if (d.status !== 'ok') return;
+  const roles = ['All'].concat(Array.from(new Set(d.data.map(v2roleOf))).sort());
+  const want = dash.params().rrole || 'All';
+  sel.replaceChildren(...roles.map((r) => { const o = document.createElement('option'); o.value = r; o.textContent = r; return o; }));
+  sel.value = roles.includes(want) ? want : 'All';
+});
+
+dash.draw('v2all', (tbody) => {
+  const d = dash.data('v2_' + v2kind());
+  if (d.status !== 'ok') { tbody.replaceChildren(); return; }
+  const role = dash.params().rrole || 'All';
+  const rows = d.data.filter((r) => role === 'All' || v2roleOf(r) === role);
+  const max = d3.max(d.data, (r) => r.conservative) || 1;
+  RR.rows(tbody, rows, (r) => r.player_id, [
+    { get: (r) => r.rank },
+    { get: (r) => r.player },
+    { get: (r) => r.role },
+    { get: (r) => RR.cellbar(RR.F.s1(r.conservative), Math.max(0, r.conservative) / max), num: true },
+    { get: (r) => RR.F.s1(r.expected), num: true },
+    { get: (r) => RR.F.s1(r.ceiling), num: true },
+    { get: (r) => RR.fmt(r.pressure_balls), num: true },
+    { get: (r) => RR.fmt(r.pressure_matches), num: true },
+    { get: (r) => r.ipl_share + '%', num: true },
+    { get: (r) => RR.signed(r.wins_added, 's1', true), num: true },
+  ]);
+});
+
+dash.draw('v2checks', (tbody) => {
+  const d = dash.data('v2_checks');
+  if (d.status !== 'ok') { tbody.replaceChildren(); return; }
+  RR.rows(tbody, d.data, (r) => r.player, [
+    { get: (r) => r.player },
+    { get: (r) => r.rank + ' of ' + r.of + (r.rank_with_big_chase ? ' (' + r.rank_with_big_chase + ' with big-chase measure)' : ''), num: true },
+    { get: (r) => RR.fmt(r.balls), num: true },
+    { get: (r) => RR.fmt(r.sr), num: true },
+    { get: (r) => RR.fmt(r.xsr), num: true },
+    { get: (r) => RR.fmt(r.balls_per_out), num: true },
+    { get: (r) => RR.signed(r.value, 's1', true), num: true },
+  ]);
+});
+</script>
